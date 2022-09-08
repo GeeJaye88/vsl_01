@@ -1,0 +1,36 @@
+
+// ---- utilties
+UINT GenerateObjectId(const std::string& s);
+
+/*!
+\note get unique string id by hashing first four ascii char values of a string using bit folding
+
+https://medium.com/@_edhuang/how-to-hash-an-ascii-string-using-bit-folding-1f9a91b34253
+
+*/
+UINT Gfx_Kandinsky_Config::GenerateObjectId(const std::string& name)
+{
+
+	// ---- catch bad juju
+		size_t len = name.length();
+		if (len <= 0) return SUCCESS_FAULT;
+
+	// ---- repeat to ensure 4 ascii chars
+		std::string char_to_hash = name;
+		len = char_to_hash.length();
+		UINT t = (UINT)(std::ceil( 4 / (FLOAT)len)) - 1;
+		for (UINT i = 0; i < t; i++) char_to_hash += name;
+
+		//std::string char_to_hash = name + name + name + name;
+		//size_t len = char_to_hash.length();
+
+	// ---- fold
+		union hash
+		{
+			UINT h;
+			BYTE s[4];
+		} h;
+		for (UINT i = 0; i < 4; i++) h.s[i] = char_to_hash[i];
+
+	return h.h;
+}

@@ -1,0 +1,9 @@
+x64 port problem with copy $(ProjectDir)[configuration]\vsl.exe $(SolutionDir)
+
+fixed by:
+
+copy $(Platform)\[configuration]/vsl.exe $(SolutionDir)
+
+So:
+
+Linker -> Output File : $(Platform)\[configuration]/vsl.exe

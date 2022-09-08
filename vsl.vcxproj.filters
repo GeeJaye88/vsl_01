@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="vsl_application">
+      <UniqueIdentifier>{48827b4f-45e9-4e09-863f-103f627b2f13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_application\lsystem">
+      <UniqueIdentifier>{61950462-c84c-4851-8c99-cf560c5cecad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_application\lsystem\header">
+      <UniqueIdentifier>{266fe305-1751-494a-b549-8fc7a1503aa0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_application\lsystem\source">
+      <UniqueIdentifier>{b120117f-7f61-4e86-bd1a-112f50ffc29f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_application\mesh3d">
+      <UniqueIdentifier>{b0ab2235-8b92-445f-9078-7cd8bd5c3c4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_application\mesh3d\source">
+      <UniqueIdentifier>{8cb11e96-56c9-4cc0-8dae-a0504b99176a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_application\mesh3d\header">
+      <UniqueIdentifier>{392e20f7-a126-48fd-92fd-9f57de2f98f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_application\template">
+      <UniqueIdentifier>{3428424d-d031-4dcc-882e-31448fed24d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_application\template\header">
+      <UniqueIdentifier>{cd31aed1-52e0-4092-92da-b63601f0e2d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_application\template\source">
+      <UniqueIdentifier>{59324d6e-70d5-4776-bbe9-11be62f98f1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_application\shared">
+      <UniqueIdentifier>{5a8f8f85-8439-4ccb-b785-0952573a3844}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_application\shared\header">
+      <UniqueIdentifier>{296f5f91-15ae-4254-a519-1d5fc00cd2f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_library">
+      <UniqueIdentifier>{2b708dfe-3149-4ee0-89f6-1d82bb3cf938}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_library\source">
+      <UniqueIdentifier>{20899a9e-386b-4e29-921e-6e6f1373ad5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_resource">
+      <UniqueIdentifier>{7115d935-8c0c-4114-a592-0472910daa5b}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+    <Filter Include="vsl_library\header">
+      <UniqueIdentifier>{707cdf39-9d0d-408d-b8c1-64bc5e4c27bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_library\hpp_obj">
+      <UniqueIdentifier>{d96837aa-d6a2-4444-b86a-ff66b12c13fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_system">
+      <UniqueIdentifier>{bc11accc-4195-4c3c-9f41-049b5429d081}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_system\header">
+      <UniqueIdentifier>{7c783a04-85d7-426a-ba61-3832bebe8b9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_system\source">
+      <UniqueIdentifier>{7c517e40-3ecd-448b-b462-4ce2e50c24cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_application\framework">
+      <UniqueIdentifier>{4dceaa1c-37a0-4588-bdd5-fe6804cdc485}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_application\framework\header">
+      <UniqueIdentifier>{426842fe-992f-4da7-afe5-8b6516d96da4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_application\framework\source">
+      <UniqueIdentifier>{ff479bf3-c455-4b5d-9c9a-2bd0d65edd40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_application\framework\hpp">
+      <UniqueIdentifier>{f6926c52-28f0-4974-bb4e-599b4c49861a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vsl_application\limage">
+      <UniqueIdentifier>{8bffbb36-3444-4288-9511-9c36cb85bc29}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icons\icon_16.ico">
+      <Filter>vsl_resource</Filter>
+    </Image>
+    <Image Include="icons\icon_32.ico">
+      <Filter>vsl_resource</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="vsl_application\lsystem\header\vsl_lsystem.h">
+      <Filter>vsl_application\lsystem\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_application\mesh3d\header\vsl_mesh3d.h">
+      <Filter>vsl_application\mesh3d\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_application\shared\header\vsl_fvf_vertex_structs.h">
+      <Filter>vsl_application\shared\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_application\template\header\vsl_template.h">
+      <Filter>vsl_application\template\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_resource\vsl_resource.h">
+      <Filter>vsl_resource</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_library\header\vsl_sem.h">
+      <Filter>vsl_library\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_library\header\vsl_gfx_element.h">
+      <Filter>vsl_library\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_library\header\vsl_gfx_kandinsky.h">
+      <Filter>vsl_library\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_library\header\vsl_gfx_kandinsky_config.h">
+      <Filter>vsl_library\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_library\header\vsl_gfx_dotobj.h">
+      <Filter>vsl_library\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_library\hpp_obj\vsl_gfx_kandinsky_cuboid_vbo.hpp">
+      <Filter>vsl_library\hpp_obj</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_library\hpp_obj\vsl_gfx_kandinsky_cuboid_vibo.hpp">
+      <Filter>vsl_library\hpp_obj</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_system\header\vsl_include.h">
+      <Filter>vsl_system\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_system\header\vsl_maths.h">
+      <Filter>vsl_system\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_library\hpp_obj\vsl_gfx_kandinsky_pyrhodo_vbo.hpp">
+      <Filter>vsl_library\hpp_obj</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_library\header\vsl_gfx_element_engine.h">
+      <Filter>vsl_library\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_library\header\vsl_gfx_element_coordinate.h">
+      <Filter>vsl_library\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_library\header\vsl_gfx_element_component.h">
+      <Filter>vsl_library\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_library\header\vsl_gfx_element_configure.h">
+      <Filter>vsl_library\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_application\shared\header\vsl_select.h">
+      <Filter>vsl_application\shared\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_library\header\vsl_gfx_log.h">
+      <Filter>vsl_library\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_library\header\vsl_gfx_command.h">
+      <Filter>vsl_library\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_system\header\vsl_win_framework.h">
+      <Filter>vsl_system\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_system\header\vsl_win_structs.h">
+      <Filter>vsl_system\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_library\header\vsl_gfx_element_io.h">
+      <Filter>vsl_library\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_application\framework\header\vsl_notes.h">
+      <Filter>vsl_application\framework\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_application\framework\hpp\vsl_notes.hpp">
+      <Filter>vsl_application\framework\hpp</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_application\framework\header\vsl_base_01.h">
+      <Filter>vsl_application\framework\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_application\framework\header\vsl_pyrhodo_01.h">
+      <Filter>vsl_application\framework\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_application\framework\header\vsl_surface_01.h">
+      <Filter>vsl_application\framework\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_library\header\vsl_gfx_d3dx.h">
+      <Filter>vsl_library\header</Filter>
+    </ClInclude>
+    <ClInclude Include="vsl_library\hpp_obj\vsl_gfx_kandinsky_notes.hpp">
+      <Filter>vsl_library\hpp_obj</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="vsl.rc">
+      <Filter>vsl_resource</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="vsl_application\lsystem\source\vsl_lsystem.cpp">
+      <Filter>vsl_application\lsystem\source</Filter>
+    </ClCompile>
+    <ClCompile Include="vsl_application\mesh3d\source\vsl_mesh3d.cpp">
+      <Filter>vsl_application\mesh3d\source</Filter>
+    </ClCompile>
+    <ClCompile Include="vsl_application\template\source\vsl_template.cpp">
+      <Filter>vsl_application\template\source</Filter>
+    </ClCompile>
+    <ClCompile Include="vsl_library\source\vsl_gfx_element.cpp">
+      <Filter>vsl_library\source</Filter>
+    </ClCompile>
+    <ClCompile Include="vsl_library\source\vsl_gfx_kandinsky.cpp">
+      <Filter>vsl_library\source</Filter>
+    </ClCompile>
+    <ClCompile Include="vsl_library\source\vsl_gfx_kandinsky_config.cpp">
+      <Filter>vsl_library\source</Filter>
+    </ClCompile>
+    <ClCompile Include="vsl_library\source\vsl_gfx_dotobj.cpp">
+      <Filter>vsl_library\source</Filter>
+    </ClCompile>
+    <ClCompile Include="vsl_library\source\vsl_gfx_element_engine.cpp">
+      <Filter>vsl_library\source</Filter>
+    </ClCompile>
+    <ClCompile Include="vsl_library\source\vsl_gfx_element_coordinate.cpp">
+      <Filter>vsl_library\source</Filter>
+    </ClCompile>
+    <ClCompile Include="vsl_library\source\vsl_gfx_element_component.cpp">
+      <Filter>vsl_library\source</Filter>
+    </ClCompile>
+    <ClCompile Include="vsl_library\source\vsl_gfx_element_configure.cpp">
+      <Filter>vsl_library\source</Filter>
+    </ClCompile>
+    <ClCompile Include="vsl_library\source\vsl_gfx_log.cpp">
+      <Filter>vsl_library\source</Filter>
+    </ClCompile>
+    <ClCompile Include="vsl_library\source\vsl_gfx_command.cpp">
+      <Filter>vsl_library\source</Filter>
+    </ClCompile>
+    <ClCompile Include="vsl_system\source\vsl_win_framework.cpp">
+      <Filter>vsl_system\source</Filter>
+    </ClCompile>
+    <ClCompile Include="vsl_system\source\vsl_win_structs.cpp">
+      <Filter>vsl_system\source</Filter>
+    </ClCompile>
+    <ClCompile Include="vsl_library\source\vsl_gfx_element_io.cpp">
+      <Filter>vsl_library\source</Filter>
+    </ClCompile>
+    <ClCompile Include="vsl_application\framework\source\vsl_base_01.cpp">
+      <Filter>vsl_application\framework\source</Filter>
+    </ClCompile>
+    <ClCompile Include="vsl_application\framework\source\vsl_pyrhodo_01.cpp">
+      <Filter>vsl_application\framework\source</Filter>
+    </ClCompile>
+    <ClCompile Include="vsl_application\framework\source\vsl_surface_01.cpp">
+      <Filter>vsl_application\framework\source</Filter>
+    </ClCompile>
+    <ClCompile Include="vsl_library\source\vsl_gfx_d3dx.cpp">
+      <Filter>vsl_library\source</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

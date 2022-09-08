@@ -1,0 +1,41 @@
+	// ---- matrices
+		pi_i3d_v01->matrix_stack->Push();
+		{
+
+			// ---- rotation matrix
+				D3DXMATRIX matrix_rotation;
+				D3DXMatrixRotationYawPitchRoll(
+						&matrix_rotation,
+						D3DXToRadian(pi_i3d_v01->x_rotate),
+						D3DXToRadian(pi_i3d_v01->y_rotate),
+						0
+					);
+
+			// ---- translation
+				D3DXMATRIX matrix_translation;
+				D3DXMatrixTranslation(&matrix_translation, 0, 0, pi_i3d_v01->z_translate);
+
+			// ----spin
+				D3DXMATRIX mat_spin;
+				pi_i3d_v01->y_turntable += (DOUBLE)(pi_i3d_v01->fw_wnd_context.GetFrameTimeDelta() / 20);
+				D3DXMatrixRotationY(&mat_spin, D3DXToRadian( (FLOAT)pi_i3d_v01->y_turntable) );
+
+			// ---- associative
+				D3DXMATRIX matrix_world = *pi_i3d_v01->matrix_stack->GetTop();
+				matrix_world = matrix_translation * matrix_world;
+				matrix_world = matrix_rotation * matrix_world;
+				matrix_world = mat_spin * matrix_world;
+				device->SetTransform(D3DTS_WORLD, &matrix_world);
+
+			// ---- old object stuff
+				#if defined(TEST_CUBE)
+					pi_i3d_v01->matrix_stack->Push();
+					Cube_Display(device, matrix_world, 0);
+					pi_i3d_v01->matrix_stack->Pop();
+				#endif
+
+			// ---- gfx system
+				HRESULT hr = pi_i3d_v01->gfx_element_system->Display(device, pi_i3d_v01->matrix_stack);
+				if (FAILED(hr)) return(S_FALSE);
+		}
+		pi_i3d_v01->matrix_stack->Pop();
