@@ -10,7 +10,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-HRESULT Gfx_Kandinsky::Cuboid_VIBO_Config()
+HRESULT Gfx_Kandinsky::Cuboid_VIBO_Config(VOID)
 {
 
 	// ---- set create tpes & vertex format
@@ -48,7 +48,7 @@ HRESULT Gfx_Kandinsky::Cuboid_VIBO_Config()
 ////////////////////////////////////////////////////////////////////////////////
 
 
-HRESULT Gfx_Kandinsky::Cuboid_VIBO_Create()
+HRESULT Gfx_Kandinsky::Cuboid_VIBO_Create(VOID)
 {
 
 	// ---- parameters

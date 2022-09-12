@@ -146,7 +146,7 @@ namespace vsl_library
 				Gfx_Kandinsky_Component Gfx_Kandinsky::GetComponentType();
 
 			// ---- component
-				HRESULT SetComponentType(const std::string& name);
+				HRESULT SetComponentType(const HRESULT component_type_id);
 
 				HRESULT AppendParameter(
 						const std::string& group_name,
@@ -186,6 +186,9 @@ namespace vsl_library
 			// ---- private implementation
 				class Pimpl_Gfx_Kandinsky;
 				std::unique_ptr<Pimpl_Gfx_Kandinsky> pimpl_gfx_kandinsky;
+
+		public:
+
 
 		};
 

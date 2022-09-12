@@ -53,6 +53,36 @@ Gfx_Kandinsky_Config::~Gfx_Kandinsky_Config()
 }
 
 
+////////////////////////////////////////////////////////////////////////////////
+
+
+HRESULT Gfx_Kandinsky_Config::GetComponentTypeId(const std::string& name)
+{
+
+	if (name == "Cuboid_VBO")
+	{
+		return Gfx_Kandinsky_Component::CUBOID_VBO;
+	}
+	else if (name == "Cuboid_VIBO")
+	{
+		return Gfx_Kandinsky_Component::Cuboid_VIBO;
+	}
+	else if (name == "PyRhoDo_VBO")
+	{
+		return Gfx_Kandinsky_Component::PYRHODO_VBO;
+	}
+	else
+	{
+		return ERROR_FAIL;
+	}
+
+	return SUCCESS_OK;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+
 HRESULT Gfx_Kandinsky_Config::AppendColourParameters(
 		Gfx_Element *component_param_group
 	)

@@ -81,9 +81,11 @@ namespace vsl_application
 
 			// ---- get gfx objects
 				vsl_library::Gfx_Command *GetCmd(VOID);
-				vsl_library::Gfx_D3dx     *GetD3D(VOID);
+				vsl_library::Gfx_D3dx    *GetD3D(VOID);
 				vsl_library::Gfx_Log     *GetLog(VOID);
+
 				vsl_library::Gfx_Element_Engine *GetGEE(VOID);
+				vsl_library::Gfx_Kandinsky      *GetKandinsky(VOID);
 
 			// ---------- UPDATE ----------
 

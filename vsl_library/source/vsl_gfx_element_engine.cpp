@@ -74,9 +74,6 @@ public:
 	// ---- log file
 		Gfx_Log *gfx_log = NULL;
 
-	// ---- component library
-		Gfx_Kandinsky_Config gfx_kandinsky_config;
-
 	// ---- recursion
 		UINT level = 0;
 
@@ -170,7 +167,7 @@ NOTE : engine methods - NOT guarded - handle all Gfx_Element
 \author Gareth Edwards
 \return HRESULT (TRUE if ok)
 
-\note recursively setup component instancing (& verify kandinsky generator)
+\note recursively setup element, element instancing & verify kandinsky
 
 */
 HRESULT Gfx_Element_Engine::Setup(VOID)
@@ -309,7 +306,7 @@ HRESULT Gfx_Element_Engine::Cleanup(VOID)
 
 \note guarding element->IsComponent()
 
-\note recursively setup component instancing (& verify kandinsky generator)
+\note recursively setup element, element instancing & verify kandinsky
 */
 HRESULT Gfx_Element_Engine::Setup(
 		Gfx_Element *element,
@@ -321,15 +318,23 @@ HRESULT Gfx_Element_Engine::Setup(
 		OutputElementInfo(element, level * 2);
 		#endif
 
+	// ---- local
+		//Gfx_Kandinsky gfx_kandinsky;
+
 	// ---- if element has a component name then verify legit component
 		if (element->GetConfigure()->GetComponentName() != "")
 		{
 
-			// ---- is a valid Kandinsky creator name then a component
-				Gfx_Kandinsky gfx_kandinsky;
-				HRESULT hr = gfx_kandinsky.SetComponentType(element->GetConfigure()->GetComponentName());
-				if (SUCCEEDED(hr))
+			// ---- is a valid Kandinsky component name then set valid
+				Gfx_Kandinsky_Config gfx_kandinsky_config;
+				HRESULT component_type_id = gfx_kandinsky_config.GetComponentTypeId(element->GetConfigure()->GetComponentName());
+				if (SUCCEEDED(component_type_id))
 				{
+
+					Gfx_Element_Component *gfx_element_component = element->GetComponent();
+					Gfx_Kandinsky *gfx_component_kandinsky = gfx_element_component->GetKandinsky();
+
+					HRESULT hr = gfx_component_kandinsky->SetComponentType(component_type_id);
 					element->GetConfigure()->SetComponent(TRUE);
 				}
 				else
@@ -370,36 +375,36 @@ HRESULT Gfx_Element_Engine::Setup(
 				if (gfx_element_component != NULL) try
 				{
 
-					// ---- set verified component type (!really important!)
-						Gfx_Kandinsky *gfx_kandinsky = gfx_element_component->GetKandinsky();
-						hr = gfx_kandinsky->SetComponentType(element->GetConfigure()->GetComponentName());
-
-					// ---- get pointer to component config callbacks
-						//  1. Gfx_Element *config_kandinsky_parameters (used here!)
-						//  2. Gfx_Element_Component *config_kandinsky_components (used in Element_SetupDX)
+					// ---- 1st: get pointer to kandinsky config callbacks
+						//  note, these callbacks are:
+						//     Gfx_Element           * config_kandinsky_parameters (used here!)
+						//     Gfx_Element_Component * config_kandinsky_components (used in Element_SetupDX)
 						Gfx_Config_Callbacks *gfx_config_callbacks = gfx_element_component->GetConfigCallbacks();
 
-					// ---- get pointer to unitialised kandinsky config object
-						Gfx_Kandinsky_Config *gfx_kandinsky_config = GetKandinskyConfig();
+					// ---- 2nd: use first config callback to get kandinsky component callbacks
+						Gfx_Kandinsky_Config gfx_kandinsky_config;
+						gfx_kandinsky_config.GetCallbacks(gfx_element_component, gfx_config_callbacks);
 
-					// ---- use kandinsky config object to initialise config kandinsky callbacks 1.
-						gfx_kandinsky_config->GetCallbacks(gfx_element_component, gfx_config_callbacks);
-
-					// ---- every component element has an added "Component" parameter group
+					// ---- 3rd: append element "Component" parameter group
 						Gfx_Element *component_param_group = element->AppendParamGroup("Component");
 
-					// ---- "append" component kandinsky parameters using config callbacks 1.
+					// ---- 4th: every component element has unique kandinsky parameter group(s) appended using config callback
 						if (gfx_config_callbacks->config_kandinsky_parameters != NULL)
 						{
 							hr = gfx_config_callbacks->config_kandinsky_parameters(component_param_group);
 							if (FAILED(hr)) throw("Failed: To append Component Kandinsky Parameters");
 						}
 
-					// ---- create component parameters
+					// ---- required to append parameters
+						Gfx_Kandinsky *gfx_component_kandinsky = gfx_element_component->GetKandinsky();
+
+					// ---- 5th: create component parameters
 						//
 						//  note: to decouple Kandinsky from the Gfx System these
 						//  parameters are not comprised of Gfx_Elements, but are 
 						//  Kandinsky [group->group->...]->param->param->... lists
+						//
+						//  note: also speeds up the retrieval of parameter values... 
 						//
 						Gfx_Element *group = component_param_group->GetFirst();
 						while (group)
@@ -416,7 +421,7 @@ HRESULT Gfx_Element_Engine::Setup(
 								OutputElementInfo(param, level * 2 + 4);
 								#endif
 
-								hr = gfx_kandinsky->AppendParameter(
+								hr = gfx_component_kandinsky->AppendParameter(
 										group_name,
 										param->GetName(),
 										param->GetValue()
@@ -699,7 +704,7 @@ HRESULT Gfx_Element_Engine::Element_SetupDX(
 						};
 
 					// ---- get element component kandinsky
-						Gfx_Kandinsky *gfx_kandinsky = gfx_element_component->GetKandinsky();
+						Gfx_Kandinsky *gfx_component_kandinsky = gfx_element_component->GetKandinsky();
 
 					// ---- get element component config callbacks
 						Gfx_Config_Callbacks *gfx_config_callbacks = gfx_element_component->GetConfigCallbacks();
@@ -739,8 +744,8 @@ HRESULT Gfx_Element_Engine::Element_SetupDX(
 								}
 
 							// ---- get kandinsky vertex buffer info
-								UINT kandinsky_vertex_buffer_size = gfx_kandinsky->GetVertexBufferSize() ;
-								UINT kandinsky_vertex_format = gfx_kandinsky->GetVertexFormat();
+								UINT kandinsky_vertex_buffer_size = gfx_component_kandinsky->GetVertexBufferSize() ;
+								UINT kandinsky_vertex_format = gfx_component_kandinsky->GetVertexFormat();
 
 							// ---- create vertex buffer
 								hr = GetDevice()->CreateVertexBuffer(
@@ -756,7 +761,7 @@ HRESULT Gfx_Element_Engine::Element_SetupDX(
 
 							// ---- copy kandinsky_vertex_buffer into vertex_buffer
 								FLOAT *kandinsky_vertex_buffer = 0;
-								gfx_kandinsky->GetVertexBuffer(&kandinsky_vertex_buffer);
+								gfx_component_kandinsky->GetVertexBuffer(&kandinsky_vertex_buffer);
 								FLOAT *f;
 								hr = (*vertex_buffer)->Lock( 0, 0, (VOID**)&f, 0);
 								if (FAILED(hr)) throw(hr);
@@ -787,7 +792,7 @@ HRESULT Gfx_Element_Engine::Element_SetupDX(
 								}
 						
 							// ---- get kandinsky index buffer info
-								UINT kandinsky_index_buffer_size = gfx_kandinsky->GetIndexBufferSize();
+								UINT kandinsky_index_buffer_size = gfx_component_kandinsky->GetIndexBufferSize();
 
 							// ---- create index buffer
 								if (kandinsky_index_buffer_size > 0)
@@ -811,7 +816,7 @@ HRESULT Gfx_Element_Engine::Element_SetupDX(
 								if (kandinsky_index_buffer_size > 0)
 								{
 									UINT *kandinsky_index_buffer = 0;
-									gfx_kandinsky->GetIndexBuffer(&kandinsky_index_buffer);
+									gfx_component_kandinsky->GetIndexBuffer(&kandinsky_index_buffer);
 									UINT *u;
 									hr = (*index_buffer)->Lock( 0, 0, (VOID**)&u, 0);
 									if (FAILED(hr)) throw(hr);
@@ -993,16 +998,16 @@ HRESULT Gfx_Element_Engine::Element_Display(
 
 			// ---- get component creator
 				HRESULT hr;
-				Gfx_Kandinsky *gfx_kandinsky = gfx_element_component->GetKandinsky();
+				Gfx_Kandinsky *gfx_component_kandinsky = gfx_element_component->GetKandinsky();
 
 			// ---- vertex parameters
-				UINT size_of_vertex_data   = gfx_kandinsky->GetVertexBufferSize();
-				UINT size_of_vertex_format = gfx_kandinsky->GetVertexFormatSize();
-				UINT format_of_vertex_data = gfx_kandinsky->GetVertexFormat();
+				UINT size_of_vertex_data   = gfx_component_kandinsky->GetVertexBufferSize();
+				UINT size_of_vertex_format = gfx_component_kandinsky->GetVertexFormatSize();
+				UINT format_of_vertex_data = gfx_component_kandinsky->GetVertexFormat();
 
 			// ---- primtive parameters
-				UINT primitive_type  = gfx_kandinsky->GetPrimitiveType();
-				UINT primitive_count = gfx_kandinsky->GetPrimitiveCount();
+				UINT primitive_type  = gfx_component_kandinsky->GetPrimitiveType();
+				UINT primitive_count = gfx_component_kandinsky->GetPrimitiveCount();
 
 			// ---- vertex buffer
 				LPDIRECT3DVERTEXBUFFER9 *vertex_buffer = gfx_element_component->GetVertexBuffer();
@@ -1018,13 +1023,13 @@ HRESULT Gfx_Element_Engine::Element_Display(
 				hr = device->SetTransform(D3DTS_WORLDMATRIX(0), gfx_element_configure->GetMatrix());
 
 			// ---- no index buffer ?
-				UINT size_of_index_buffer = gfx_kandinsky->GetIndexBufferSize();
+				UINT size_of_index_buffer = gfx_component_kandinsky->GetIndexBufferSize();
 				if (size_of_index_buffer == 0)
 				{
 					hr = device->DrawPrimitive(
 							(D3DPRIMITIVETYPE)primitive_type,
 							0,
-							gfx_kandinsky->GetPrimitiveCount()
+						gfx_component_kandinsky->GetPrimitiveCount()
 						);
 				}
 				else
@@ -1269,11 +1274,6 @@ Gfx_Log *Gfx_Element_Engine::GetGfxLog(VOID)
 Gfx_Element *Gfx_Element_Engine::GetProjectRoot(VOID)
 {
 	return pimpl_gfx_element_engine->gfx_element_project_root;
-}
-
-Gfx_Kandinsky_Config *Gfx_Element_Engine::GetKandinskyConfig(VOID)
-{
-	return &pimpl_gfx_element_engine->gfx_kandinsky_config;
 }
 
 HRESULT Gfx_Element_Engine::SetGfxLog(Gfx_Log *log)

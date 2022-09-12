@@ -206,27 +206,10 @@ Gfx_Kandinsky_Component Gfx_Kandinsky::GetComponentType()
 	return (Gfx_Kandinsky_Component)Get(Gfx_Kandinsky_Param::COMPONENT_TYPE);
 }
 
-HRESULT Gfx_Kandinsky::SetComponentType(const std::string& name)
+HRESULT Gfx_Kandinsky::SetComponentType(const HRESULT component_type_id)
 {
-
-	if (name == "Cuboid_VBO")
-	{
-		Set(Gfx_Kandinsky_Param::COMPONENT_TYPE, Gfx_Kandinsky_Component::CUBOID_VBO);
-	}
-	else if (name == "Cuboid_VIBO")
-	{
-		Set(Gfx_Kandinsky_Param::COMPONENT_TYPE, Gfx_Kandinsky_Component::Cuboid_VIBO);
-	}
-	else if (name == "PyRhoDo_VBO")
-	{
-		Set(Gfx_Kandinsky_Param::COMPONENT_TYPE, Gfx_Kandinsky_Component::PYRHODO_VBO);
-	}
-	else
-	{
-		return ERROR_FAIL;
-	}
-
-	return SUCCESS_OK;
+	HRESULT result = Set(Gfx_Kandinsky_Param::COMPONENT_TYPE, component_type_id);
+	return result;
 }
 
 
@@ -600,3 +583,4 @@ HRESULT Gfx_Kandinsky::SetParameterValue(
 
 
 ////////////////////////////////////////////////////////////////////////////////
+

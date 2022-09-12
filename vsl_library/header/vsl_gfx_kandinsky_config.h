@@ -45,19 +45,26 @@ namespace vsl_library
 
 		public:
 
-			// ---- cdtor
+		// ---- cdtor
 			Gfx_Kandinsky_Config(VOID);
 			virtual ~Gfx_Kandinsky_Config();
 
+		// ---- get component id
+			HRESULT GetComponentTypeId(const std::string& name);
+
+		// ---- append standard colour & transform parameters
 			static HRESULT AppendColourParameters(Gfx_Element *component_param_group);
 			static HRESULT AppendTransformParameters(Gfx_Element *component_param_group);
 
+		// ---- cuboid - vertex buffer version 
 			static HRESULT Cuboid_VBO_Config_Kandinsky_Parameters(Gfx_Element *component_param_group);
 			static HRESULT Cuboid_VBO_Config_Kandinsky_Component(Gfx_Element_Component *gfx_element_component);
 
+		// ---- cuboid - index & vertex buffer version
 			static HRESULT Cuboid_VIBO_Config_Kandinsky_Parameters(Gfx_Element *component_param_group);
 			static HRESULT Cuboid_VIBO_Config_Kandinsky_Component(Gfx_Element_Component *gfx_element_component);
 
+		// ---- pyramidal rhombic dodecahedron - vertex buffer version
 			static HRESULT PyRhoDo_VBO_Config_Kandinsky_Parameters(Gfx_Element *component_param_group);
 			static HRESULT PyRhoDo_VBO_Config_Kandinsky_Component(Gfx_Element_Component *gfx_element_component);
 
@@ -71,6 +78,7 @@ namespace vsl_library
 			// ---- private implementation
 				class Pimpl_Gfx_Kandinsky_Config;
 				std::unique_ptr<Pimpl_Gfx_Kandinsky_Config> pimpl_gfx_kandinsky_config;
+
 		};
 
 }

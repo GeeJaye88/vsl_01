@@ -39,8 +39,9 @@ class Base_01::Pimpl_Base_01
 
 	// ---- required gfx:
 		vsl_library::Gfx_Command gfx_command;
-		vsl_library::Gfx_D3dx gfx_d3dx;
-		vsl_library::Gfx_Log gfx_log;
+		vsl_library::Gfx_D3dx    gfx_d3dx;
+		vsl_library::Gfx_Log     gfx_log;
+
 		vsl_library::Gfx_Element_Engine gfx_element_engine;
 
 };
@@ -115,10 +116,10 @@ Base_01::~Base_01()
 
 // ---- get Gfx objects
 	vsl_library::Gfx_Command *Base_01::GetCmd(VOID) { return &pimpl_base_v01->gfx_command; }
-	vsl_library::Gfx_D3dx     *Base_01::GetD3D(VOID) { return &pimpl_base_v01->gfx_d3dx; }
+	vsl_library::Gfx_D3dx    *Base_01::GetD3D(VOID) { return &pimpl_base_v01->gfx_d3dx; }
 	vsl_library::Gfx_Log     *Base_01::GetLog(VOID) { return &pimpl_base_v01->gfx_log; }
-	vsl_library::Gfx_Element_Engine
-	                         *Base_01::GetGEE(VOID) { return &pimpl_base_v01->gfx_element_engine; }
+	vsl_library::Gfx_Element_Engine *Base_01::GetGEE(VOID) { return &pimpl_base_v01->gfx_element_engine; }
+
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -150,7 +151,7 @@ HRESULT Base_01::Fw_Setup(VOID)
 		hr = Gfx_Setup_Project();
 		if (FAILED(hr)) return ERROR_FAIL;
 
-	// ---- recursively setup element instancing (& verify element generator) using Gfx Element Engine
+	// ---- recursively setup elements, element instancing & verify kandinsky component
 		hr = GetGEE()->Setup();
 		if (FAILED(hr)) return ERROR_FAIL;
 
@@ -398,39 +399,39 @@ HRESULT Base_01::Gfx_Setup_Project(VOID)
 					if (Gfx_Element *project = engine_root_element->Find("Project"))
 					{
 
-						// ---- component to be instanced
-							Gfx_Element *component_tr0 = project->Append("TR0", 0);
+						// ---- element to be instanced
+							Gfx_Element *element_tr0 = project->Append("TR0", 0);
 
-							Gfx_Element_Configure *configure = component_tr0->GetConfigure();
+							Gfx_Element_Configure *configure = element_tr0->GetConfigure();
 							configure->SetComponentName("PyRhoDo_VBO");
 							configure->SetVisible(FALSE);
 							 
-						// ---- group id 1 : component id 4 (or could be 3!)
-							Gfx_Element *group_1 = project->Append("G1", 1);
-							GetGEE()->AddBookMark(group_1);
+						// ---- group id 1 : element id 4 (or could be 3!)
+							Gfx_Element *element_group_1 = project->Append("G1", 1);
+							GetGEE()->AddBookMark(element_group_1);
 							{
-								Gfx_Element *component_tr1 = group_1->Append("TR1", 4);
-								GetGEE()->AddBookMark(component_tr1);
+								Gfx_Element *element_tr1 = element_group_1->Append("TR1", 4);
+								GetGEE()->AddBookMark(element_tr1);
 
-								Gfx_Element_Configure *configure = component_tr1->GetConfigure();
+								Gfx_Element_Configure *configure = element_tr1->GetConfigure();
 								configure->SetComponentName("Cuboid_VBO");
 								configure->SetVisible(TRUE);
 								configure->SetInstance(TRUE);
-								configure->SetInstanceName(component_tr0->GetName());
+								configure->SetInstanceName(element_tr0->GetName());
 							}
 
-						// ---- group id 1 : component id 4
-							Gfx_Element *group_2 = project->Append("G2", 2);
-							GetGEE()->AddBookMark(group_2);
+						// ---- group id 2 : element id 4
+							Gfx_Element *element_group_2 = project->Append("G2", 2);
+							GetGEE()->AddBookMark(element_group_2);
 							{
-								Gfx_Element *component_tr2 = group_2->Append("TR2", 4);
-								GetGEE()->AddBookMark(component_tr2);
+								Gfx_Element *element_tr2 = element_group_2->Append("TR2", 4);
+								GetGEE()->AddBookMark(element_tr2);
 
-								Gfx_Element_Configure *configure = component_tr2->GetConfigure();
+								Gfx_Element_Configure *configure = element_tr2->GetConfigure();
 								configure->SetComponentName("Cuboid_VIBO");
 								configure->SetVisible(TRUE);
 								configure->SetInstance(TRUE);
-								configure->SetInstanceName(component_tr0->GetName());
+								configure->SetInstanceName(element_tr0->GetName());
 							}
 
 					}
@@ -503,7 +504,7 @@ HRESULT Base_01::Gfx_Setup_Components(VOID)
 	// ---- scope
 		using namespace vsl_library;
 
-	// ---------- update element component properties & parameters ----------
+	// ---------- update element properties & parameters ----------
 		Gfx_Element *engine_root_element = GetGEE()->GetEngineRoot();
 		Gfx_Element *element_tr0 = engine_root_element->Find("TR0");
 		if (element_tr0 != NULL)
@@ -516,11 +517,11 @@ HRESULT Base_01::Gfx_Setup_Components(VOID)
 				kandinsky->Set(Gfx_Kandinsky_Param::INSIDE, 1);
 
 			// ---- move -> update both component & corresponding kandinsky parameters
-				Gfx_Element *component_param_group = element_tr0->FindParamGroup("Component");
-				if (component_param_group)
+				Gfx_Element *element_param_group = element_tr0->FindParamGroup("Component");
+				if (element_param_group)
 				{
 					std::string move = "0.5";
-					HRESULT hr = component_param_group->SetParameterValue("Dimension", "Move", move);
+					HRESULT hr = element_param_group->SetParameterValue("Dimension", "Move", move);
 					if (SUCCEEDED(hr))
 					{
 						kandinsky->SetParameterValue("Dimension", "Move", move);

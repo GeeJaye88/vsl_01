@@ -7,10 +7,11 @@
 \author Gareth Edwards
 */
 
+
 ////////////////////////////////////////////////////////////////////////////////
 
 
-HRESULT Gfx_Kandinsky::Cuboid_VBO_Config()
+HRESULT Gfx_Kandinsky::Cuboid_VBO_Config(VOID)
 {
 
 	// ---- set create types & vertex format
@@ -48,7 +49,7 @@ HRESULT Gfx_Kandinsky::Cuboid_VBO_Config()
 ////////////////////////////////////////////////////////////////////////////////
 
 
-HRESULT Gfx_Kandinsky::Cuboid_VBO_Create()
+HRESULT Gfx_Kandinsky::Cuboid_VBO_Create(VOID)
 {
 
 	// ---- parameters
@@ -230,7 +231,7 @@ HRESULT Gfx_Kandinsky::Cuboid_VBO_Create()
 ////////////////////////////////////////////////////////////////////////////////
 
 
-HRESULT Gfx_Kandinsky::Cuboid_v1()
+HRESULT Gfx_Kandinsky::Cuboid_v1(VOID)
 {
 
 	// ---- centred dimensions

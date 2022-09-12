@@ -56,9 +56,9 @@ public:
 	// ---- properties
 
 	// ---- gfx
-		Gfx_Element_Configure  *configure = NULL;
+		Gfx_Element_Configure  *configure  = NULL;
 		Gfx_Element_Coordinate *coordinate = NULL;
-		Gfx_Element_Component  *component = NULL;
+		Gfx_Element_Component  *component  = NULL;
 
 	// ---- state
 		UINT  id = 0;
@@ -263,7 +263,11 @@ public:
 	VOID Gfx_Element::SetNext(Gfx_Element *next)         { pimpl_gfx_element->next = next; }
 
 // ---- parameter group
-	
+
+	/*
+		Note: parameter groups do not require a kandinsky object
+	*/
+
 	Gfx_Element *Gfx_Element::AppendParamGroup(std::string name)
 	{
 		Gfx_Element *parent = this;

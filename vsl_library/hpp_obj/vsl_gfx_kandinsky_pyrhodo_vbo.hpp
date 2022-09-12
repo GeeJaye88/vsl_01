@@ -10,7 +10,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-HRESULT Gfx_Kandinsky::PyRhoDo_VBO_Config()
+HRESULT Gfx_Kandinsky::PyRhoDo_VBO_Config(VOID)
 {
 
 	// ---- set create tpes & vertex format
@@ -49,7 +49,7 @@ HRESULT Gfx_Kandinsky::PyRhoDo_VBO_Config()
 ////////////////////////////////////////////////////////////////////////////////
 
 
-HRESULT Gfx_Kandinsky::PyRhoDo_VBO_Create()
+HRESULT Gfx_Kandinsky::PyRhoDo_VBO_Create(VOID)
 {
 
 	// ---- parameters
