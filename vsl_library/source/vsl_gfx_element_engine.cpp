@@ -14,7 +14,7 @@
 	#include "../../vsl_library/header/vsl_gfx_element_engine.h"
 	#include "../../vsl_library/header/vsl_gfx_element.h"
 	#include "../../vsl_library/header/vsl_gfx_log.h"
-	#include "../../vsl_library/header/vsl_gfx_kandinsky_config.h"
+	#include "../../vsl_library/header/vsl_gfx_kandinsky_interface.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -319,15 +319,14 @@ HRESULT Gfx_Element_Engine::Setup(
 		#endif
 
 	// ---- local
-		//Gfx_Kandinsky gfx_kandinsky;
 
 	// ---- if element has a component name then verify legit component
 		if (element->GetConfigure()->GetComponentName() != "")
 		{
 
 			// ---- is a valid Kandinsky component name then set valid
-				Gfx_Kandinsky_Config gfx_kandinsky_config;
-				HRESULT component_type_id = gfx_kandinsky_config.GetComponentTypeId(element->GetConfigure()->GetComponentName());
+				Gfx_Kandinsky_Interface gfx_kandinsky_interface;
+				HRESULT component_type_id = gfx_kandinsky_interface.GetComponentTypeId(element->GetConfigure()->GetComponentName());
 				if (SUCCEEDED(component_type_id))
 				{
 
@@ -377,21 +376,21 @@ HRESULT Gfx_Element_Engine::Setup(
 
 					// ---- 1st: get pointer to kandinsky config callbacks
 						//  note, these callbacks are:
-						//     Gfx_Element           * config_kandinsky_parameters (used here!)
-						//     Gfx_Element_Component * config_kandinsky_components (used in Element_SetupDX)
-						Gfx_Config_Callbacks *gfx_config_callbacks = gfx_element_component->GetConfigCallbacks();
+						//     Gfx_Element           * kandinsky_interface_append_parameters (used here!)
+						//     Gfx_Element_Component * kandinsky_interface_config_and_create (used in Element_SetupDX)
+						Gfx_Kandinsky_Interface_Callbacks *gfx_kandinsky_interface_callbacks = gfx_element_component->GetKandinskyInterfaceCallbacks();
 
-					// ---- 2nd: use first config callback to get kandinsky component callbacks
-						Gfx_Kandinsky_Config gfx_kandinsky_config;
-						gfx_kandinsky_config.GetCallbacks(gfx_element_component, gfx_config_callbacks);
+					// ---- 2nd: use first interface callback to get kandinsky component callbacks
+						Gfx_Kandinsky_Interface gfx_kandinsky_interface;
+						gfx_kandinsky_interface.GetCallbacks(gfx_element_component, gfx_kandinsky_interface_callbacks);
 
 					// ---- 3rd: append element "Component" parameter group
 						Gfx_Element *component_param_group = element->AppendParamGroup("Component");
 
 					// ---- 4th: every component element has unique kandinsky parameter group(s) appended using config callback
-						if (gfx_config_callbacks->config_kandinsky_parameters != NULL)
+						if (gfx_kandinsky_interface_callbacks->kandinsky_interface_append_parameters != NULL)
 						{
-							hr = gfx_config_callbacks->config_kandinsky_parameters(component_param_group);
+							hr = gfx_kandinsky_interface_callbacks->kandinsky_interface_append_parameters(component_param_group);
 							if (FAILED(hr)) throw("Failed: To append Component Kandinsky Parameters");
 						}
 
@@ -706,32 +705,32 @@ HRESULT Gfx_Element_Engine::Element_SetupDX(
 					// ---- get element component kandinsky
 						Gfx_Kandinsky *gfx_component_kandinsky = gfx_element_component->GetKandinsky();
 
-					// ---- get element component config callbacks
-						Gfx_Config_Callbacks *gfx_config_callbacks = gfx_element_component->GetConfigCallbacks();
+					// ---- get element component kandinsky interface callbacks
+						Gfx_Kandinsky_Interface_Callbacks *gfx_kandinsky_interface_callbacks = gfx_element_component->GetKandinskyInterfaceCallbacks();
 
 					// ---- get element component configuration bitmask
 						//
 						// if a kandinsky component is to be recreated then force by
-						// setting to Gfx_Config_Bitmasks::KANDINSKY
+						// setting to Gfx_Component_Buffer_Bitmasks::KANDINSKY
 						//
 						UINT config_bitmask = 0;
 
-					// ---- config kandinsky component
-						if (!IsBitSet(config_bitmask,Gfx_Config_Bitmasks::KANDINSKY))
+					// ---- initialise kandinsky buffers
+						if (!IsBitSet(config_bitmask,Gfx_Component_Buffer_Bitmasks::KANDINSKY))
 						{
 
-							// ---- config kandinsky component, to initialises vertex & index buffers
-								if (gfx_config_callbacks->config_kandinsky_components != NULL)
+							// ---- initialise both kandinsky vertex & index buffers
+								if (gfx_kandinsky_interface_callbacks->kandinsky_interface_config_and_create != NULL)
 								{
-									hr = gfx_config_callbacks->config_kandinsky_components(gfx_element_component);
+									hr = gfx_kandinsky_interface_callbacks->kandinsky_interface_config_and_create(gfx_element_component);
 									if (FAILED(hr)) throw(hr);
-									config_bitmask += Gfx_Config_Bitmasks::KANDINSKY;
+									config_bitmask += Gfx_Component_Buffer_Bitmasks::KANDINSKY;
 								}
 
 						}
 
 					// ---- create vertex_buffer & then copy kandinsky_vertex_buffer into vertex_buffer
-						if (!IsBitSet(config_bitmask,Gfx_Config_Bitmasks::VERTEX_BUFFER))
+						if (!IsBitSet(config_bitmask,Gfx_Component_Buffer_Bitmasks::VERTEX_BUFFER))
 						{  
 
 							// ---- release vertex_buffer
@@ -757,7 +756,7 @@ HRESULT Gfx_Element_Engine::Element_SetupDX(
 										NULL
 									);
 								if (FAILED(hr)) throw(hr);
-								config_bitmask += Gfx_Config_Bitmasks::VERTEX_BUFFER;
+								config_bitmask += Gfx_Component_Buffer_Bitmasks::VERTEX_BUFFER;
 
 							// ---- copy kandinsky_vertex_buffer into vertex_buffer
 								FLOAT *kandinsky_vertex_buffer = 0;
@@ -779,7 +778,7 @@ HRESULT Gfx_Element_Engine::Element_SetupDX(
 
 
 					// ---- create index_buffer & then copy kandinsky_index_buffer into index_buffer
-						if (!IsBitSet(config_bitmask,Gfx_Config_Bitmasks::INDEX_BUFFER))
+						if (!IsBitSet(config_bitmask,Gfx_Component_Buffer_Bitmasks::INDEX_BUFFER))
 						{
 
 							// ---- release index_buffer
@@ -806,7 +805,7 @@ HRESULT Gfx_Element_Engine::Element_SetupDX(
 											NULL
 										);
 									if (FAILED(hr)) throw(hr);
-									config_bitmask += Gfx_Config_Bitmasks::INDEX_BUFFER;
+									config_bitmask += Gfx_Component_Buffer_Bitmasks::INDEX_BUFFER;
 								}
 
 							// ---- copy kandinsky_index_buffer into index_buffer

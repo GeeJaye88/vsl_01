@@ -68,7 +68,7 @@ namespace vsl_library
 
 		// ---- hierarchical node links
 			Gfx_Element *GetParent(VOID);
-			Gfx_Element *GetFirst(VOID);
+			Gfx_Element *GetFirst(VOID); 
 			Gfx_Element *GetLast(VOID);
 			Gfx_Element *GetPrevious(VOID);
 			Gfx_Element *GetNext(VOID);

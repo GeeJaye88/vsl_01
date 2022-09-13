@@ -9,7 +9,7 @@
 
 // ---- library
 	#include "../../vsl_library/header/vsl_gfx_element_component.h"
-	#include "../../vsl_library/header/vsl_gfx_kandinsky_config.h"
+	#include "../../vsl_library/header/vsl_gfx_kandinsky_interface.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -41,7 +41,7 @@ public:
 		}
 
 	// ---- properties
-		Gfx_Config_Callbacks component_kandinsky_callbacks;
+		Gfx_Kandinsky_Interface_Callbacks component_kandinsky_callbacks;
 
 	// ---- config
 		UINT config_bitmask = 0;
@@ -95,7 +95,7 @@ UINT Gfx_Element_Component::GetConfigBitmask(VOID)
 	return pimpl_gfx_element_component->config_bitmask;
 }
 
-Gfx_Config_Callbacks *Gfx_Element_Component::GetConfigCallbacks(VOID)
+Gfx_Kandinsky_Interface_Callbacks *Gfx_Element_Component::GetKandinskyInterfaceCallbacks(VOID)
 {
 	return &pimpl_gfx_element_component->component_kandinsky_callbacks;
 }

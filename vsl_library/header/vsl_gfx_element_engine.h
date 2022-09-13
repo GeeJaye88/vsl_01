@@ -23,7 +23,7 @@ namespace vsl_library
 
 	// ---- "forward" declarations
 		class Gfx_Element;
-		class Gfx_Kandinsky_Config;
+		class Gfx_Kandinsky_Interface;
 		class Gfx_Log;
 
 	// ----class
@@ -70,7 +70,7 @@ namespace vsl_library
 				Gfx_Element *GetEngineRoot(VOID);
 				Gfx_Log     *GetGfxLog(VOID);
 				Gfx_Element *GetProjectRoot(VOID);
-				Gfx_Kandinsky_Config *GetKandinskyConfig(VOID);
+				Gfx_Kandinsky_Interface *GetKandinskyConfig(VOID);
 
 			// ---- set
 				HRESULT SetGfxLog(Gfx_Log *log);

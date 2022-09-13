@@ -111,9 +111,6 @@
     <ClInclude Include="vsl_library\header\vsl_gfx_kandinsky.h">
       <Filter>vsl_library\header</Filter>
     </ClInclude>
-    <ClInclude Include="vsl_library\header\vsl_gfx_kandinsky_config.h">
-      <Filter>vsl_library\header</Filter>
-    </ClInclude>
     <ClInclude Include="vsl_library\header\vsl_gfx_dotobj.h">
       <Filter>vsl_library\header</Filter>
     </ClInclude>
@@ -183,6 +180,9 @@
     <ClInclude Include="vsl_library\hpp_obj\vsl_gfx_kandinsky_notes.hpp">
       <Filter>vsl_library\hpp_obj</Filter>
     </ClInclude>
+    <ClInclude Include="vsl_library\header\vsl_gfx_kandinsky_interface.h">
+      <Filter>vsl_library\header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="vsl.rc">
@@ -203,9 +203,6 @@
       <Filter>vsl_library\source</Filter>
     </ClCompile>
     <ClCompile Include="vsl_library\source\vsl_gfx_kandinsky.cpp">
-      <Filter>vsl_library\source</Filter>
-    </ClCompile>
-    <ClCompile Include="vsl_library\source\vsl_gfx_kandinsky_config.cpp">
       <Filter>vsl_library\source</Filter>
     </ClCompile>
     <ClCompile Include="vsl_library\source\vsl_gfx_dotobj.cpp">
@@ -248,6 +245,9 @@
       <Filter>vsl_application\framework\source</Filter>
     </ClCompile>
     <ClCompile Include="vsl_library\source\vsl_gfx_d3dx.cpp">
+      <Filter>vsl_library\source</Filter>
+    </ClCompile>
+    <ClCompile Include="vsl_library\source\vsl_gfx_kandinsky_interface.cpp">
       <Filter>vsl_library\source</Filter>
     </ClCompile>
   </ItemGroup>

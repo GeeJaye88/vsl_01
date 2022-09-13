@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
-// ---------- vsl_gfx_kandinsky_config.cpp ----------
+// ---------- vsl_gfx_kandinsky_interface.cpp ----------
 /*!
-\file vsl_gfx_kandinsky_config.cpp
+\file vsl_gfx_kandinsky_interface.cpp
 \brief Implementation of the Gfx_Kandinsky_Config class
 \author Gareth Edwards 
 */
 
 // ---- library
-	#include "../../vsl_library/header/vsl_gfx_kandinsky_config.h"
+	#include "../../vsl_library/header/vsl_gfx_kandinsky_interface.h"
 	#include "../../vsl_library/header/vsl_gfx_element_component.h"
 
 
@@ -23,14 +23,14 @@ using namespace vsl_library;
 
 // ---------- private implementation ----------
 
-class Gfx_Kandinsky_Config::Pimpl_Gfx_Kandinsky_Config
+class Gfx_Kandinsky_Interface::Pimpl_Gfx_Kandinsky_Interface
 {
 
 public:
 
 	// ---- cdtor
-		Pimpl_Gfx_Kandinsky_Config(VOID) { ; }
-		~Pimpl_Gfx_Kandinsky_Config() { ; }
+		Pimpl_Gfx_Kandinsky_Interface(VOID) { ; }
+		~Pimpl_Gfx_Kandinsky_Interface() { ; }
 
 };
 
@@ -42,12 +42,12 @@ public:
 
 // ---------- ctor ----------
 
-Gfx_Kandinsky_Config::Gfx_Kandinsky_Config(VOID) : pimpl_gfx_kandinsky_config(new Pimpl_Gfx_Kandinsky_Config)
+Gfx_Kandinsky_Interface::Gfx_Kandinsky_Interface(VOID) : pimpl_gfx_kandinsky_interface(new Pimpl_Gfx_Kandinsky_Interface)
 {
 	;
 }
 
-Gfx_Kandinsky_Config::~Gfx_Kandinsky_Config()
+Gfx_Kandinsky_Interface::~Gfx_Kandinsky_Interface()
 {
 	;
 }
@@ -56,7 +56,7 @@ Gfx_Kandinsky_Config::~Gfx_Kandinsky_Config()
 ////////////////////////////////////////////////////////////////////////////////
 
 
-HRESULT Gfx_Kandinsky_Config::GetComponentTypeId(const std::string& name)
+HRESULT Gfx_Kandinsky_Interface::GetComponentTypeId(const std::string& name)
 {
 
 	if (name == "Cuboid_VBO")
@@ -83,7 +83,7 @@ HRESULT Gfx_Kandinsky_Config::GetComponentTypeId(const std::string& name)
 ////////////////////////////////////////////////////////////////////////////////
 
 
-HRESULT Gfx_Kandinsky_Config::AppendColourParameters(
+HRESULT Gfx_Kandinsky_Interface::AppendColourParameters(
 		Gfx_Element *component_param_group
 	)
 {
@@ -98,7 +98,7 @@ HRESULT Gfx_Kandinsky_Config::AppendColourParameters(
 }
 
 
-HRESULT Gfx_Kandinsky_Config::AppendTransformParameters(
+HRESULT Gfx_Kandinsky_Interface::AppendTransformParameters(
 		Gfx_Element *component_param_group
 	)
 {
@@ -125,7 +125,7 @@ HRESULT Gfx_Kandinsky_Config::AppendTransformParameters(
 
 // ---------- cuboid - vertex buffer vesion ----------
 
-HRESULT Gfx_Kandinsky_Config::Cuboid_VBO_Config_Kandinsky_Parameters(
+HRESULT Gfx_Kandinsky_Interface::Cuboid_VBO_Config_Kandinsky_Parameters(
 		Gfx_Element *component_param_group
 	)
 {
@@ -135,7 +135,7 @@ HRESULT Gfx_Kandinsky_Config::Cuboid_VBO_Config_Kandinsky_Parameters(
 	return SUCCESS_OK;
 }
 
-HRESULT Gfx_Kandinsky_Config::Cuboid_VBO_Config_Kandinsky_Component(
+HRESULT Gfx_Kandinsky_Interface::Cuboid_VBO_Config_Kandinsky_Component(
 		Gfx_Element_Component *gfx_element_component
 	)
 {
@@ -154,7 +154,7 @@ HRESULT Gfx_Kandinsky_Config::Cuboid_VBO_Config_Kandinsky_Component(
 
 // ---------- cuboid - index & vertex buffer version ----------
 
-HRESULT Gfx_Kandinsky_Config::Cuboid_VIBO_Config_Kandinsky_Parameters(
+HRESULT Gfx_Kandinsky_Interface::Cuboid_VIBO_Config_Kandinsky_Parameters(
 		Gfx_Element *component_param_group
 	)
 {
@@ -164,7 +164,7 @@ HRESULT Gfx_Kandinsky_Config::Cuboid_VIBO_Config_Kandinsky_Parameters(
 	return SUCCESS_OK;
 }
 
-HRESULT Gfx_Kandinsky_Config::Cuboid_VIBO_Config_Kandinsky_Component(
+HRESULT Gfx_Kandinsky_Interface::Cuboid_VIBO_Config_Kandinsky_Component(
 		Gfx_Element_Component *gfx_element_component
 	)
 {
@@ -182,7 +182,7 @@ HRESULT Gfx_Kandinsky_Config::Cuboid_VIBO_Config_Kandinsky_Component(
 
 // ----------  pyramidal rhombic dodecahedron - vertex buffer version ----------
 
-HRESULT Gfx_Kandinsky_Config::PyRhoDo_VBO_Config_Kandinsky_Parameters(
+HRESULT Gfx_Kandinsky_Interface::PyRhoDo_VBO_Config_Kandinsky_Parameters(
 		Gfx_Element *component_param_group
 	)
 {
@@ -203,7 +203,7 @@ HRESULT Gfx_Kandinsky_Config::PyRhoDo_VBO_Config_Kandinsky_Parameters(
 	return SUCCESS_OK;
 }
 
-HRESULT Gfx_Kandinsky_Config::PyRhoDo_VBO_Config_Kandinsky_Component(
+HRESULT Gfx_Kandinsky_Interface::PyRhoDo_VBO_Config_Kandinsky_Component(
 		Gfx_Element_Component *gfx_element_component
 	)
 {
@@ -219,9 +219,9 @@ HRESULT Gfx_Kandinsky_Config::PyRhoDo_VBO_Config_Kandinsky_Component(
 ////////////////////////////////////////////////////////////////////////////////
 
 
-HRESULT Gfx_Kandinsky_Config::GetCallbacks(
+HRESULT Gfx_Kandinsky_Interface::GetCallbacks(
 		Gfx_Element_Component *gfx_element_component,
-		Gfx_Config_Callbacks *gfx_config_callbacks
+		Gfx_Kandinsky_Interface_Callbacks *gfx_kandinsky_interface_callbacks
 	)
 {
 
@@ -233,26 +233,26 @@ HRESULT Gfx_Kandinsky_Config::GetCallbacks(
 	{
 		case Gfx_Kandinsky_Component::CUBOID_VBO:
 			{
-				gfx_config_callbacks->config_kandinsky_parameters = Cuboid_VBO_Config_Kandinsky_Parameters;
-				gfx_config_callbacks->config_kandinsky_components = Cuboid_VBO_Config_Kandinsky_Component;
+				gfx_kandinsky_interface_callbacks->kandinsky_interface_append_parameters = Cuboid_VBO_Config_Kandinsky_Parameters;
+				gfx_kandinsky_interface_callbacks->kandinsky_interface_config_and_create = Cuboid_VBO_Config_Kandinsky_Component;
 			}
 			break;
 		case Gfx_Kandinsky_Component::Cuboid_VIBO:
 			{
-				gfx_config_callbacks->config_kandinsky_parameters = Cuboid_VIBO_Config_Kandinsky_Parameters;
-				gfx_config_callbacks->config_kandinsky_components = Cuboid_VIBO_Config_Kandinsky_Component;
+				gfx_kandinsky_interface_callbacks->kandinsky_interface_append_parameters = Cuboid_VIBO_Config_Kandinsky_Parameters;
+				gfx_kandinsky_interface_callbacks->kandinsky_interface_config_and_create = Cuboid_VIBO_Config_Kandinsky_Component;
 			}
 			break;
 		case Gfx_Kandinsky_Component::PYRHODO_VBO:
 			{
-				gfx_config_callbacks->config_kandinsky_parameters = PyRhoDo_VBO_Config_Kandinsky_Parameters;
-				gfx_config_callbacks->config_kandinsky_components = PyRhoDo_VBO_Config_Kandinsky_Component;
+				gfx_kandinsky_interface_callbacks->kandinsky_interface_append_parameters = PyRhoDo_VBO_Config_Kandinsky_Parameters;
+				gfx_kandinsky_interface_callbacks->kandinsky_interface_config_and_create = PyRhoDo_VBO_Config_Kandinsky_Component;
 			}
 			break;
 		default:
 			{
-				gfx_config_callbacks->config_kandinsky_parameters = NULL;
-				gfx_config_callbacks->config_kandinsky_components = NULL;
+				gfx_kandinsky_interface_callbacks->kandinsky_interface_append_parameters = NULL;
+				gfx_kandinsky_interface_callbacks->kandinsky_interface_config_and_create = NULL;
 			}
 			return SUCCESS_FAULT;
 	}

@@ -173,7 +173,7 @@ namespace vsl_library
 					HRESULT Cuboid_VBO_Config(VOID);
 					HRESULT Cuboid_VBO_Create(VOID);
 
-				// ---- cuboid
+				// ---- cuboid with index buffer
 					HRESULT Cuboid_VIBO_Config(VOID);
 					HRESULT Cuboid_VIBO_Create(VOID);
 

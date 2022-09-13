@@ -28,21 +28,21 @@ namespace vsl_library
 		class Gfx_Element;
 		class Gfx_Element_Component;
 
-	// ---- kandinsky config callbacks
-		struct Gfx_Config_Callbacks
+	// ---- kandinsky interface callbacks
+		struct Gfx_Kandinsky_Interface_Callbacks
 		{
-			HRESULT(*config_kandinsky_parameters) (Gfx_Element *) = NULL;
-			HRESULT(*config_kandinsky_components) (Gfx_Element_Component *) = NULL;
+			HRESULT(*kandinsky_interface_append_parameters) (Gfx_Element *) = NULL;
+			HRESULT(*kandinsky_interface_config_and_create) (Gfx_Element_Component *) = NULL;
 		};
 
-	// ---- enum component config bitmasks
-		typedef enum Gfx_Config_Bitmasks
+	// ---- enum component buffer bitmasks
+		typedef enum Gfx_Component_Buffer_Bitmasks
 		{ 
 			NONE           = 0,
 			KANDINSKY      = 1,
 			VERTEX_BUFFER  = 2,
 			INDEX_BUFFER   = 4
-		} Gfx_Config_Bitmasks;
+		} Gfx_Component_Buffer_Bitmasks;
 
 	// ---- element component interface to the Kandinsky system
 		class Gfx_Element_Component
@@ -55,11 +55,11 @@ namespace vsl_library
 				~Gfx_Element_Component();
 
 			// ---- get
-				Gfx_Kandinsky            *GetKandinsky(VOID);
-				LPDIRECT3DVERTEXBUFFER9  *GetVertexBuffer(VOID);
-				LPDIRECT3DINDEXBUFFER9   *GetIndexBuffer(VOID);
-				UINT                      GetConfigBitmask(VOID);
-				Gfx_Config_Callbacks     *GetConfigCallbacks(VOID);
+				Gfx_Kandinsky                     *GetKandinsky(VOID);
+				LPDIRECT3DVERTEXBUFFER9           *GetVertexBuffer(VOID);
+				LPDIRECT3DINDEXBUFFER9            *GetIndexBuffer(VOID);
+				UINT                               GetConfigBitmask(VOID);
+				Gfx_Kandinsky_Interface_Callbacks *GetKandinskyInterfaceCallbacks(VOID);
 
 			// ---- set
 				VOID SetVertexBuffer(LPDIRECT3DVERTEXBUFFER9 vertex_buffer);

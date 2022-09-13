@@ -32,15 +32,15 @@ Kandinsky Directories
 
 header : "vsl_application/vsl_library/header/"
       -> "vsl_gfx_kandinsky.h" 
-      -> "vsl_gfx_kandinsky_config.h"
+      -> "vsl_gfx_kandinsky_interface.h"
 
 hpp : "vsl_application/vsl_library/hpp/"
       -> "vsl_gfx_kandinsky.hpp"
-      -> "vsl_gfx_kandinsky_config.hpp"
+      -> "vsl_gfx_kandinsky_interface.hpp"
 
 cpp : "vsl_application/vsl_library/source/"
       -> "vsl_gfx_kandinsky.cpp"
-      -> "vsl_gfx_kandinsky_config.cpp"
+      -> "vsl_gfx_kandinsky_interface.cpp"
 
 Kandinsky Object Directory
 --------------------------
@@ -85,25 +85,25 @@ Adding a New Kandinsky Object
    HRESULT Demo_IVBO_Config(VOID);
    HRESULT Demo_IVBO_Create(VOID);
 
-5: Add "Demo" component methods to the Kandinsky_Config component.
+5: Add "Demo" component methods to the Kandinsky_Interface component.
 
-   Edit "vsl_gfx_kandinsky_config.hpp"
+   Edit "vsl_gfx_kandinsky_interface.hpp"
 
    Add - if with vertex & index buffer:
 
    static HRESULT Cuboid_VBO_Config_Kandinsky_Parameters(vsl_library::Gfx_Element *element)
    {
-      [... see "vsl_gfx_kandinsky_config.hpp" for example]
+      [... see "vsl_gfx_kandinsky_interface.hpp" for example]
       return SUCCESS_OK;
    }
 
    static HRESULT Cuboid_VBO_Config_Kandinsky_Component(vsl_library::Gfx_Element_Component *element_component)
    {
-      [... see "vsl_gfx_kandinsky_config.hpp" for example]
+      [... see "vsl_gfx_kandinsky_interface.hpp" for example]
       return SUCCESS_OK;
    }
 
-   These mothods are included in the "vsl_gfx_kandinsky_config.cpp" file.
+   These mothods are included in the "vsl_gfx_kandinsky_interface.cpp" file.
 
 6: Thats it...
 

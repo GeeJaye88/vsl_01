@@ -298,7 +298,7 @@
     <ClInclude Include="vsl_library\header\vsl_gfx_element_engine.h" />
     <ClInclude Include="vsl_library\header\vsl_gfx_element_io.h" />
     <ClInclude Include="vsl_library\header\vsl_gfx_kandinsky.h" />
-    <ClInclude Include="vsl_library\header\vsl_gfx_kandinsky_config.h" />
+    <ClInclude Include="vsl_library\header\vsl_gfx_kandinsky_interface.h" />
     <ClInclude Include="vsl_library\header\vsl_gfx_log.h" />
     <ClInclude Include="vsl_library\header\vsl_sem.h" />
     <ClInclude Include="vsl_library\header\vsl_gfx_dotobj.h" />
@@ -331,7 +331,7 @@
     <ClCompile Include="vsl_library\source\vsl_gfx_element_engine.cpp" />
     <ClCompile Include="vsl_library\source\vsl_gfx_element_io.cpp" />
     <ClCompile Include="vsl_library\source\vsl_gfx_kandinsky.cpp" />
-    <ClCompile Include="vsl_library\source\vsl_gfx_kandinsky_config.cpp" />
+    <ClCompile Include="vsl_library\source\vsl_gfx_kandinsky_interface.cpp" />
     <ClCompile Include="vsl_library\source\vsl_gfx_dotobj.cpp" />
     <ClCompile Include="vsl_library\source\vsl_gfx_log.cpp" />
     <ClCompile Include="vsl_system\source\vsl_win_framework.cpp" />

@@ -20,7 +20,7 @@
 
 // ---- library
 	#include "../../vsl_library/header/vsl_gfx_element_engine.h"
-	#include "../../vsl_library/header/vsl_gfx_kandinsky_config.h"
+	#include "../../vsl_library/header/vsl_gfx_kandinsky_interface.h"
 	#include "../../vsl_library/header/vsl_gfx_kandinsky.h"
 	#include "../../vsl_library/header/vsl_gfx_command.h"
 	#include "../../vsl_library/header/vsl_gfx_d3dx.h"

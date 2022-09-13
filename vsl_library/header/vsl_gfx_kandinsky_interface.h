@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
-// ---------- vsl_gfx_kandinsky_config.h ----------
+// ---------- vsl_gfx_kandinsky_interface.h ----------
 /*!
-\file vsl_gfx_kandinsky_config.h
-\brief Interface to the Kandinsky_Config class
+\file vsl_gfx_kandinsky_interface.h
+\brief Interface to the Kandinsky_Interface class
 \author Gareth Edwards
 */ 
 
@@ -23,31 +23,15 @@
 namespace vsl_library
 {
 
-	// ---- "forward" declarations
-		class  Gfx_Element;					// config     - Gfx_Element_Configure
-											// coordinate - Gfx_Element_Coordinate
-											// component  - Gfx_Element_Component
-											// identity   - name & id
-											// node
-
-		class  Gfx_Element_Component;		// kandinsky
-											// vertex buffer
-											// index buffer
-											// bitmask
-											// config callbacks
-
-		struct Gfx_Config_Callbacks;		// component config kandinsky callbacks
-
-
 	// ---- class
-		class Gfx_Kandinsky_Config
+		class Gfx_Kandinsky_Interface
 		{
 
 		public:
 
 		// ---- cdtor
-			Gfx_Kandinsky_Config(VOID);
-			virtual ~Gfx_Kandinsky_Config();
+			Gfx_Kandinsky_Interface(VOID);
+			virtual ~Gfx_Kandinsky_Interface();
 
 		// ---- get component id
 			HRESULT GetComponentTypeId(const std::string& name);
@@ -70,17 +54,18 @@ namespace vsl_library
 
 			static HRESULT GetCallbacks(
 					Gfx_Element_Component *gfx_element_component,
-					Gfx_Config_Callbacks *gfx_config_callbacks
+					Gfx_Kandinsky_Interface_Callbacks *gfx_kandinsky_interface_callbacks
 				);
 
 		private:
 
 			// ---- private implementation
-				class Pimpl_Gfx_Kandinsky_Config;
-				std::unique_ptr<Pimpl_Gfx_Kandinsky_Config> pimpl_gfx_kandinsky_config;
+				class Pimpl_Gfx_Kandinsky_Interface;
+				std::unique_ptr<Pimpl_Gfx_Kandinsky_Interface> pimpl_gfx_kandinsky_interface;
 
 		};
 
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////
