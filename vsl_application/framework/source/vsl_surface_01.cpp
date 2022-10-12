@@ -248,4 +248,92 @@ HRESULT Surface_01::Gfx_Element_Bookmarks(VOID)
 }
 
 
+// ---------- Update_If_Key_Pressed ----------
+/*!
+\brief update application state (key async pressed)
+\author Gareth Edwards
+*/
+VOID Surface_01::Update_If_AsyncKey_Pressed(VOID)
+{
+
+	// ---- global
+		vsl_system::Win_Engine *win_eng = Get_Win_Engine();
+		vsl_library::Gfx_Command *gfx_com = GetCmd();
+
+	// ---- local
+		DWORD key_just_pressed = gfx_com->GetKeyJustPressed() & 0x8000f;
+
+	// ---- check async
+		if (GetAsyncKeyState(';') & 0x8000f)
+		{
+			win_eng->SetCmdLineMode(TRUE);
+			Sleep(200);
+			OutputDebugString("{\n");
+		}
+		else if (GetAsyncKeyState(VK_RIGHT) & 0x8000f)
+		{
+			win_eng->SetCmdLineMode(FALSE);
+			Sleep(200);
+			OutputDebugString("}\n");
+		}
+
+}
+
+
+// ---------- Update_On_Screen_Text --------
+/*!
+\brief update on screen text (e.g. app name, instructions, fps)
+\author Gareth Edwards
+*/
+VOID Surface_01::Update_On_Screen_Text(VOID)
+{
+
+	// ---- local
+		HRESULT hr;
+		D3DCOLOR colour = D3DCOLOR_XRGB(255, 255, 255);
+
+	// ---- position text (left, top, right, bottom)
+
+		RECT rct = { 20, 20, 700, 40 };
+		hr = GetD3D()->DisplayText(
+				Get_Win_Create()->GetName(),
+				colour,
+				rct
+			);
+
+		rct.top += 20;
+		rct.bottom += 20;
+		hr = GetD3D()->DisplayText(
+				Get_Win_Engine()->GetFpsReport(),
+				colour,
+				rct
+			);
+
+	// ---- console
+		rct.top = Get_Win_Create()->GetHeight() - 160;
+		rct.bottom = rct.top + 20;
+		for (UINT i = 0; i < 6; i++)
+		{
+
+			// note: unformatted std::string line_number = std::to_string(i);
+			// note: from C++17 can use std::to_chars instead in a similar way
+			//       to std::snprintf, and from C++20 can use std::format.
+
+			char buffer[20];
+			std::snprintf(buffer, 20, "%.4d", i);
+			std::string line_number(buffer);
+
+			std::string line_text = "take sword";
+			hr = GetD3D()->DisplayText(
+					line_number + ": " + line_text,
+					colour,
+					rct
+				);
+
+			rct.top += 20;
+			rct.bottom += 20;
+		}
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////

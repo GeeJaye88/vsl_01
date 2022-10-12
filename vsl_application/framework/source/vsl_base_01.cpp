@@ -61,7 +61,7 @@ Base_01::Base_01(VOID) : pimpl_base_v01(new Pimpl_Base_01)
 	// ---- local
 		HRESULT hr;
 
-	// ---- win: Win_Create - get & initialise window create parameters 
+	// ---- win: Win_Create - get & initialise window create struct 
 		vsl_system::Win_Create *win_cr8 = Get_Win_Create();
 		win_cr8->SetName("Base_01");
 		win_cr8->SetCentred(TRUE);
@@ -69,7 +69,7 @@ Base_01::Base_01(VOID) : pimpl_base_v01(new Pimpl_Base_01)
 		win_cr8->SetDimensions(800,600);
 		win_cr8->SetAaq(4);
 
-	// ---- win: Get_Win_Engine - get & initialise windows engine parameters
+	// ---- win: Get_Win_Engine - get & initialise windows engine struct
 		vsl_system::Win_Engine *win_eng = Get_Win_Engine();
 		win_eng->SetColour(92, 92, 92);
 		win_eng->SetFps(60);
@@ -236,6 +236,8 @@ HRESULT Base_01::Fw_Display(LPDIRECT3DDEVICE9 device)
 		Update_If_AsyncKey_Pressed();
 		Update_On_Screen_Text();
 
+		Gfx_Setup_Viewrect(device);
+
 	// ---- handle gfx elements that have been bookmarked
 		hr = Gfx_Element_Bookmarks();
 		if (FAILED(hr)) return ERROR_FAIL;
@@ -253,6 +255,32 @@ HRESULT Base_01::Fw_Display(LPDIRECT3DDEVICE9 device)
 		if (FAILED(hr)) return ERROR_FAIL;
 
 	return SUCCESS_OK;
+}
+
+
+HRESULT Base_01::Gfx_Setup_Viewrect(LPDIRECT3DDEVICE9 device)
+{
+
+	// ---- local
+		HRESULT hr;
+
+		IDirect3DDevice9 *d3d9_device = device;
+
+	// ---- get client adjusted viewrect
+		Vs_FloatRectangle viewrect = { 100, 100, 500, 500};
+
+	// ---- set viewport
+		D3DVIEWPORT9 fvp;
+		fvp.X      = (DWORD)(viewrect.left+0.5);
+		fvp.Y      = (DWORD)(viewrect.top+0.5);
+		fvp.Width  = (DWORD)(viewrect.right - viewrect.left + 0.5);
+		fvp.Height = (DWORD)(viewrect.bottom - viewrect.top + 0.5);
+		fvp.MinZ   =  0;
+		fvp.MaxZ   =  1;
+		d3d9_device->SetViewport(&fvp);
+
+		return SUCCESS_OK;
+
 }
 
 
@@ -738,6 +766,7 @@ VOID Base_01::Update_On_Screen_Text(VOID)
 			);
 
 		rct.top = Get_Win_Create()->GetHeight() - 80;
+
 		rct.bottom = rct.top + 20;
 		hr = GetD3D()->DisplayText(
 				Get_Win_Engine()->GetFpsReport(),

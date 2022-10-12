@@ -10,6 +10,7 @@
 
 #include "../header/vsl_gfx_d3dx.h"
 
+
 static vsl_library::Gfx_Command gfx_command;
 
 
@@ -26,7 +27,7 @@ class Gfx_D3dx::Pimpl_Gfx_D3dx
 
 public:
 
-	// ---- constructor/destructor ----
+	// ---- cdtor
 		Pimpl_Gfx_D3dx() { ; }
 		~Pimpl_Gfx_D3dx() { ; }
 
@@ -66,7 +67,7 @@ public:
 ////////////////////////////////////////////////////////////////////////////////
 
 
-// ---------- ctor ----------
+// ---------- cdtor ----------
 
 Gfx_D3dx::Gfx_D3dx() : pimpl_gfx_d3dx(new Pimpl_Gfx_D3dx)
 {

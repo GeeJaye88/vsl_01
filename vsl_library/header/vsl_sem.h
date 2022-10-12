@@ -15,6 +15,20 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
+// ---- Vs_FloatRectangle----
+/*!
+\brief primitive type
+\author Gareth Edwards
+*/
+struct Vs_FloatRectangle
+{
+	FLOAT left;
+	FLOAT top;
+	FLOAT right;
+	FLOAT bottom;
+};
+
+
 // ---- VS_VertexFormat ----
 /*!
 \brief vertex formats

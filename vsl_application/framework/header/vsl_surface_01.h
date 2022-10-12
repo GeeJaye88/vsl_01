@@ -52,6 +52,15 @@ namespace vsl_application
 			// ---- handle elements that have been bookmarked
 				HRESULT Gfx_Element_Bookmarks(VOID) override;
 
+				// ---------- UPDATE ----------
+
+				// ---- update state and text overlay
+				//VOID Update_Gfx_Command_Param(VOID);
+				VOID Update_If_AsyncKey_Pressed(VOID) override;
+				VOID Update_On_Screen_Text(VOID) override;
+
+				// 
+				BOOL text_mode = FALSE;
 		};
 
 }

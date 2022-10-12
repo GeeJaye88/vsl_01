@@ -28,8 +28,10 @@
 	LPDIRECT3DDEVICE9        g_pd3dDevice = NULL;
 	D3DPRESENT_PARAMETERS    g_d3dpp;
 	BOOL                     g_window_size = FALSE;
+	BOOL                     g_window_maximised = FALSE;
 	WPARAM                   g_wParam;
 	LPARAM                   g_lParam;
+
 	vsl_system::Win_Create	*g_win_create;
 	vsl_system::Win_Engine	*g_win_engine;
 

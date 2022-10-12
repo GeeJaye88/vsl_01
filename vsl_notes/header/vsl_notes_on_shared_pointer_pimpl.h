@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
-// ---------- vsl_notes.h ----------
+// ---------- vsl_shared_pointer_pimpl.h ----------
 /*!
-\file vsl_notes.h
-\brief interface for the Object3d_V01 class
+\file vsl_shared_pointer_pimpl.h
+\brief notes on shared pointers
 \author Gareth Edwards
 */
 

@@ -34,6 +34,8 @@ class Gfx_Command::Pimpl_Gfx_Command
 		FLOAT  mouse_wheel_click_default = 0;
 
 	// ---- key
+		DWORD key_shift = 0;
+		DWORD key_caps = 0;
 		DWORD key_just_pressed = 0;
 		DWORD key_last_pressed = 0;
 

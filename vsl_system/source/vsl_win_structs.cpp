@@ -168,12 +168,18 @@ public:
 		DWORD seconds_last = 0;
 		DWORD seconds_now = 0;
 
-	// ---- input
+	// ---- device
+		BOOL  regulated = TRUE;
+
 		INT   mouse_move_x = 0;
 		INT   mouse_move_y = 0;
 		INT   mouse_wheel_delta = 0;
-		INT   keydown = 0;
-		BOOL  regulated = TRUE;
+
+		INT   key_down = 0;
+		INT   key_shift = 0;
+		BOOL  command_line_mode = FALSE;
+		std::string command_line;
+
 
 };
 
@@ -183,136 +189,158 @@ public:
 
 // ---------- Win_Engine ----------
 
-Win_Engine::Win_Engine(VOID)
-	{ pimpl_win_engine = new Pimpl_Win_Engine(); }
+	Win_Engine::Win_Engine(VOID)
+		{ pimpl_win_engine = new Pimpl_Win_Engine(); }
 
-Win_Engine::~Win_Engine()
-	{ delete pimpl_win_engine; pimpl_win_engine = NULL; }
+	Win_Engine::~Win_Engine()
+		{ delete pimpl_win_engine; pimpl_win_engine = NULL; }
 
 
-// ---- fps
+// ---- interface
 
-VOID Win_Engine::SetFps(UINT fps)
-	{ pimpl_win_engine->fps = fps; }
+	VOID Win_Engine::SetFps(UINT fps)
+		{ pimpl_win_engine->fps = fps; }
 
-VOID Win_Engine::SetFpsNow(UINT fps_now)
-	{ pimpl_win_engine->fps_now = fps_now; }
+	VOID Win_Engine::SetFpsNow(UINT fps_now)
+		{ pimpl_win_engine->fps_now = fps_now; }
 
-VOID Win_Engine::SetColour(UINT r, UINT g, UINT b)
-	{	pimpl_win_engine->red = r;
-		pimpl_win_engine->green = g;
-		pimpl_win_engine->blue = b; }
+	VOID Win_Engine::SetColour(UINT r, UINT g, UINT b)
+		{	pimpl_win_engine->red = r;
+			pimpl_win_engine->green = g;
+			pimpl_win_engine->blue = b; }
 
-VOID Win_Engine::SetRegulated(BOOL regulated)
-	{ pimpl_win_engine->regulated = regulated; }
+	UINT Win_Engine::GetFps(VOID)
+		{ return pimpl_win_engine->fps; }
 
-UINT Win_Engine::GetFps(VOID)
-	{ return pimpl_win_engine->fps; }
+	UINT Win_Engine::GetFpsNow(VOID)
+		{ return pimpl_win_engine->fps_now; }
 
-UINT Win_Engine::GetFpsNow(VOID)
-	{ return pimpl_win_engine->fps_now; }
-
-std::string Win_Engine::GetFpsReport(VOID)
-{
-	std::string report;
-	report = std::to_string(GetFpsNow());
-	report += " FPS ";
-	if ( GetRegulated() )
+	std::string Win_Engine::GetFpsReport(VOID)
 	{
-		report += "[ Regulated ]";
+		std::string report;
+		report = std::to_string(GetFpsNow());
+		report += " FPS ";
+		if ( GetRegulated() )
+		{
+			report += "[ Regulated ]";
+		}
+		else
+		{
+			report += "[ NOT Regulated ";
+			report += std::to_string(GetFps());
+			report += " FPS ]";
+		}
+		return report;
 	}
-	else
-	{
-		report += "[ NOT Regulated ";
-		report += std::to_string(GetFps());
-		report += " FPS ]";
-	}
-	return report;
-}
 
-BOOL Win_Engine::GetRegulated(VOID)
-	{ return pimpl_win_engine->regulated; }
+	UINT Win_Engine::GetRed(VOID)
+		{ return pimpl_win_engine->red; }
 
+	UINT Win_Engine::GetGreen(VOID)
+		{ return pimpl_win_engine->green; }
 
-// ---- display
-
-UINT Win_Engine::GetRed(VOID)
-	{ return pimpl_win_engine->red; }
-
-UINT Win_Engine::GetGreen(VOID)
-	{ return pimpl_win_engine->green; }
-
-UINT Win_Engine::GetBlue(VOID)
-	{ return pimpl_win_engine->blue; }
+	UINT Win_Engine::GetBlue(VOID)
+		{ return pimpl_win_engine->blue; }
 
 
 // ---- time
 
-VOID Win_Engine::SetMsStart(FLOAT ms_start)
-	{ pimpl_win_engine->ms_start = ms_start; }
+	VOID Win_Engine::SetMsStart(FLOAT ms_start)
+		{ pimpl_win_engine->ms_start = ms_start; }
 
-VOID Win_Engine::SetMsDelta(FLOAT ms_delta)
-	{ pimpl_win_engine->ms_delta = ms_delta; }
+	VOID Win_Engine::SetMsDelta(FLOAT ms_delta)
+		{ pimpl_win_engine->ms_delta = ms_delta; }
 
-VOID Win_Engine::SetMsElapsed(FLOAT ms_elapsed)
-	{ pimpl_win_engine->ms_elapsed = ms_elapsed; }
+	VOID Win_Engine::SetMsElapsed(FLOAT ms_elapsed)
+		{ pimpl_win_engine->ms_elapsed = ms_elapsed; }
 
-VOID Win_Engine::SetMsNow(FLOAT ms_now)
-	{ pimpl_win_engine->ms_now = ms_now; }
+	VOID Win_Engine::SetMsNow(FLOAT ms_now)
+		{ pimpl_win_engine->ms_now = ms_now; }
 
-VOID  Win_Engine::SetSecondsLast(DWORD seconds_last)
-	{ pimpl_win_engine->seconds_last = seconds_last; }
+	VOID  Win_Engine::SetSecondsLast(DWORD seconds_last)
+		{ pimpl_win_engine->seconds_last = seconds_last; }
 
-VOID  Win_Engine::SetSecondsNow(DWORD seconds_now)
-	{ pimpl_win_engine->seconds_now = seconds_now; }
+	VOID  Win_Engine::SetSecondsNow(DWORD seconds_now)
+		{ pimpl_win_engine->seconds_now = seconds_now; }
+
+	VOID Win_Engine::SetRegulated(BOOL regulated)
+		{ pimpl_win_engine->regulated = regulated; }
+
+	FLOAT Win_Engine::GetMsStart(VOID)
+		{ return pimpl_win_engine->ms_start; }
+
+	FLOAT Win_Engine::GetMsDelta(VOID)
+		{ return pimpl_win_engine->ms_delta; }
+
+	FLOAT Win_Engine::GetMsElapsed(VOID)
+		{ return pimpl_win_engine->ms_elapsed; }
+
+	FLOAT Win_Engine::GetMsNow(VOID)
+		{ return pimpl_win_engine->ms_now; }
+
+	DWORD Win_Engine::GetSecondsLast(VOID)
+		{ return pimpl_win_engine->seconds_last; }
+
+	DWORD Win_Engine::GetSecondsNow(VOID)
+		{ return pimpl_win_engine->seconds_now; }
+
+	BOOL Win_Engine::GetRegulated(VOID)
+		{ return pimpl_win_engine->regulated; }
 
 
-FLOAT Win_Engine::GetMsStart(VOID)
-	{ return pimpl_win_engine->ms_start; }
+// ---- device
 
-FLOAT Win_Engine::GetMsDelta(VOID)
-	{ return pimpl_win_engine->ms_delta; }
+	/*
+		note: these are non vsl_library legacy methods,
+		used by applications NOT based on vsl_application
+	*/
 
-FLOAT Win_Engine::GetMsElapsed(VOID)
-	{ return pimpl_win_engine->ms_elapsed; }
+	VOID Win_Engine::SetMouseLeftButtonDownMove(INT mouse_move_x, INT mouse_move_y)
+		{	pimpl_win_engine->mouse_move_x = mouse_move_x;
+			pimpl_win_engine->mouse_move_y = mouse_move_y; }
 
-FLOAT Win_Engine::GetMsNow(VOID)
-	{ return pimpl_win_engine->ms_now; }
+	VOID Win_Engine::SetMouseWheelClickDelta(INT mouse_wheel_delta)
+		{ pimpl_win_engine->mouse_wheel_delta = mouse_wheel_delta; }
 
-DWORD Win_Engine::GetSecondsLast(VOID)
-	{ return pimpl_win_engine->seconds_last; }
+	INT  Win_Engine::GetMouseLeftButtonDownX(VOID)
+		{ return pimpl_win_engine->mouse_move_x; }
 
-DWORD Win_Engine::GetSecondsNow(VOID)
-	{ return pimpl_win_engine->seconds_now; }
+	INT  Win_Engine::GetMouseLeftButtonDownY(VOID)
+		{ return pimpl_win_engine->mouse_move_y; }
 
+	INT  Win_Engine::GetMouseWheelClickDelta(VOID)
+		{ return pimpl_win_engine->mouse_wheel_delta; }
 
-/*
-	note: these are non vsl_library legcacy methods
+	/*
+		note: used in windows framework Win_Process function
+		to acquire text input
+	*/
+	VOID Win_Engine::SetKeyDown(INT keydown)
+		{ pimpl_win_engine->key_down = keydown; }
 
-	      vsl_library uses Gfx_Command struct
-*/
+	VOID Win_Engine::SetKeyShift(INT key_shift)
+		{ pimpl_win_engine->key_shift = key_shift; }
 
-VOID Win_Engine::SetMouseLeftButtonDownMove(INT mouse_move_x, INT mouse_move_y)
-	{	pimpl_win_engine->mouse_move_x = mouse_move_x;
-		pimpl_win_engine->mouse_move_y = mouse_move_y; }
+	INT  Win_Engine::GetKeyDown(VOID)
+		{ return pimpl_win_engine->key_down; }
 
-VOID Win_Engine::SetMouseWheelClickDelta(INT mouse_wheel_delta)
-	{ pimpl_win_engine->mouse_wheel_delta = mouse_wheel_delta; }
+	INT Win_Engine::GetKeyShift(VOID)
+		{ return pimpl_win_engine->key_shift; }
 
-VOID Win_Engine::SetKeydown(INT keydown)
-	{ pimpl_win_engine->keydown = keydown; }
+	/*
+		note: command line interface
+	*/
+	VOID Win_Engine::SetCmdLineMode(BOOL mode)
+		{ pimpl_win_engine->command_line_mode = mode; }
 
-INT  Win_Engine::GetMouseLeftButtonDownX(VOID)
-	{ return pimpl_win_engine->mouse_move_x; }
+	BOOL Win_Engine::GetCmdLineMode(VOID)
+		{ return pimpl_win_engine->command_line_mode; }
 
-INT  Win_Engine::GetMouseLeftButtonDownY(VOID)
-	{ return pimpl_win_engine->mouse_move_y; }
+	std::string Win_Engine::GetCmdLine()
+		{ return pimpl_win_engine->command_line; }
 
-INT  Win_Engine::GetMouseWheelClickDelta(VOID)
-	{ return pimpl_win_engine->mouse_wheel_delta; }
-
-INT  Win_Engine::GetKeydown(VOID)
-	{ return pimpl_win_engine->keydown; }
+	VOID Win_Engine::SetCmdLine(std::string line)
+		{ pimpl_win_engine->command_line = line; }
 
 
 ////////////////////////////////////////////////////////////////////////////////

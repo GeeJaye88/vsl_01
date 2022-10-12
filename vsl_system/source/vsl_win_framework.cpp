@@ -19,6 +19,8 @@
 // ---- Microsoft Visual C++ include file
 	#include "../../vsl_resource/vsl_resource.h"
 
+// ----
+
 // ---------- headers ----------
 	//
 	// application includes:
@@ -241,27 +243,140 @@ LRESULT CALLBACK Win_Process(
     static POINT ptLastMousePosit;
     static POINT ptCurrentMousePosit;
     static BOOL  bMousing;
-    
+
+	vsl_system::Win_Engine *win_eng;
+
     switch( msg )
     {
+		case WM_KEYUP:
+			{
+				g_app->Fw_Get_Win_Engine(&win_eng);
+
+				switch (wParam)
+				{
+					case VK_SHIFT:
+						win_eng->SetKeyShift(0);
+						break;
+
+					default:
+						break;
+				}
+				break;
+			}
+			break;
+
         case WM_KEYDOWN:
-        {
-            switch( wParam )
-            {
-                case VK_ESCAPE:
-                    PostQuitMessage(0);
-                    break;
+			{
+				g_app->Fw_Get_Win_Engine(&win_eng);
 
-				case VK_F1:
-					g_window_size = FALSE;
-					break;
+				switch( wParam )
+				{
+					case VK_ESCAPE:
+						{
+							int id = MessageBox(
+									NULL,
+									"Do you want to exit?",
+									"Confirm Exit",
+									MB_ICONWARNING | MB_YESNOCANCEL | MB_DEFBUTTON2
+								);
+							switch (id)
+							{
+								case IDCANCEL:
+								case IDNO:
+									break;
+								case IDYES:
+									PostQuitMessage(0);
+									break;
+							}
+						}
+						break;
+						 
+					case VK_SHIFT:
+						win_eng->SetKeyShift(1);
+						break;
 
-				default:
-					break;
-            }
-			g_app->Fw_Set_Keydown(wParam);
-        }
-        break;
+					case VK_CLEAR: // Windows legacy keypad #5
+						break;
+
+					case VK_RETURN:
+						{
+							if (win_eng->GetCmdLineMode())
+							{
+								std::string new_cmd_line = win_eng->GetCmdLine();
+								if (!new_cmd_line.empty())
+								{
+									win_eng->SetCmdLine(new_cmd_line);
+									OutputDebugString(new_cmd_line.c_str());
+									OutputDebugString("\n");
+									win_eng->SetCmdLine("");
+								}
+							}
+						}
+						break;
+
+					default:
+						{
+
+							// ---- command keys
+								INT cmd_key_begin = (INT)'C';
+								INT cmd_key_end   = (INT)'Q';
+								INT cmd_key_last  = win_eng->GetKeyDown();
+								INT cmd_key_now   = (INT)wParam;
+
+							// ---- flags
+								BOOL cmd_tidy_up = FALSE;
+
+							// ---- cmd begin
+								if (cmd_key_last == cmd_key_begin && (INT)cmd_key_now == cmd_key_begin)
+								{
+									wParam = 0;
+									win_eng->SetCmdLineMode(TRUE);
+									std::string new_cmd_line = "";
+									win_eng->SetCmdLine(new_cmd_line);
+								}
+							// ---- cmd end
+								else if (cmd_key_last == cmd_key_end && (INT)cmd_key_now == cmd_key_end)
+								{
+									wParam = 0;
+									win_eng->SetCmdLineMode(FALSE);
+									std::string new_cmd_line = win_eng->GetCmdLine();
+									if (!new_cmd_line.empty())
+									{
+										new_cmd_line.pop_back();
+										win_eng->SetCmdLine(new_cmd_line);
+									}
+									cmd_tidy_up = TRUE;
+								}
+
+							// ---- cmd update
+								if (win_eng->GetCmdLineMode() && wParam > 0)
+								{
+									CHAR c    = { win_eng->GetKeyShift() == 1 ? (CHAR)toupper(cmd_key_now) : (CHAR)tolower(cmd_key_now) };
+									BOOL caps = (GetKeyState(VK_CAPITAL) & 0x0001) == 1;
+									c         = caps ? (CHAR)toupper(cmd_key_now) : c;
+									std::string new_cmd_line = win_eng->GetCmdLine();
+									new_cmd_line += c;
+									win_eng->SetCmdLine(new_cmd_line);
+								}
+
+							// ---- cmd send
+								if (win_eng->GetCmdLineMode() || cmd_tidy_up)
+								{
+									OutputDebugString(win_eng->GetCmdLine().c_str());
+									OutputDebugString("\n");
+								}
+
+							// ---- store
+								if (wParam > 0)
+									win_eng->SetKeyDown((INT)wParam);
+
+						}
+						break;
+				}
+
+				g_app->Fw_Set_Keydown(wParam);
+			}
+			break;
 
 		#ifndef WM_MOUSEWHEEL
 		#define WM_MOUSEWHEEL 0x020A
@@ -320,7 +435,7 @@ LRESULT CALLBACK Win_Process(
         {
 
 			// if force resize....
-			if (g_window_size == TRUE || wParam == SIZE_MAXIMIZED)
+			if (g_window_maximised == TRUE || g_window_size == TRUE || wParam == SIZE_MAXIMIZED)
 			{
 
 				// if the device is not NULL and the WM_SIZE message is not a
@@ -332,17 +447,23 @@ LRESULT CALLBACK Win_Process(
 					HRESULT hr = Vsl_CleanupDX();
 					if (FAILED(hr)) return 0; // TBD
 
-					// get new dimensions
-					g_d3dpp.BackBufferWidth = LOWORD(lParam);
-					g_d3dpp.BackBufferHeight = HIWORD(lParam);
+					// catch maximise & unmaximise
+					if (wParam == SIZE_MAXIMIZED)
+						g_window_maximised = TRUE;
+					else
+						g_window_maximised = FALSE;
 
 					// get y system metrics
 					DWORD cyBorder  = GetSystemMetrics(SM_CYBORDER);
 					DWORD cyEdge    = GetSystemMetrics(SM_CYEDGE);
 					DWORD cyCaption = GetSystemMetrics(SM_CYCAPTION);
+					UINT  yOffset   = (INT)((FLOAT)(cyCaption + cyBorder + cyEdge) * 1.5f);
+
+					// store new dimensions
+					g_d3dpp.BackBufferWidth = LOWORD(lParam);;
+					g_d3dpp.BackBufferHeight = HIWORD(lParam);;
 
 					// calc adjusted offset
-					UINT yOffset = (INT)((FLOAT)(cyCaption + cyBorder + cyEdge) * 1.5f);
 					g_win_create->SetDimensions(g_d3dpp.BackBufferWidth, g_d3dpp.BackBufferHeight + yOffset);
 
 					// reset device
@@ -358,6 +479,7 @@ LRESULT CALLBACK Win_Process(
 					// setup applications usage of device
 					hr = Vsl_SetupDX();
 					if (FAILED(hr)) return ERROR_FAIL; // TBD
+
 				}
 			}
 			// catch all but the last WM_SIZE - see WM_EXITSIZEMOVE
@@ -688,7 +810,7 @@ HRESULT Vsl_Display(VOID)
 	// ----begin
 		hr = g_pd3dDevice->BeginScene();
 
-	// ----display
+	// ---- display
 		hr = g_app->Fw_Display(g_pd3dDevice);
 
 	// ----end
@@ -696,6 +818,9 @@ HRESULT Vsl_Display(VOID)
 
 	// ----present
 		hr = g_pd3dDevice->Present( NULL, NULL, NULL, NULL );
+
+	// ----render all panels
+		//hr = Vsl_RenderPanels();
 
 	return SUCCESS_OK;
 }

@@ -114,7 +114,7 @@ namespace vsl_application
 
 
 		// ---- font
-			LPD3DXFONT font;              // display text font
+			LPD3DXFONT font;               // display text font
 			std::vector<LVertex> verts;    // list of vertices 
 			LVertex v;                     // instance of vertex struct
 

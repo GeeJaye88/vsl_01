@@ -36,7 +36,7 @@ namespace vsl_application
 		class Base_01
 		{
 
-			public:
+		public:
 
 			// ---- cdtor
 				Base_01(VOID);
@@ -71,6 +71,10 @@ namespace vsl_application
 			// ---- handle elements that have been bookmarked
 				virtual HRESULT Gfx_Element_Bookmarks(VOID);
 
+			// ---- panels
+				HRESULT Gfx_Setup_Viewrect(LPDIRECT3DDEVICE9);
+
+			// ---- housekeeping
 				VOID Gfx_Read_Project_SDL(VOID);
 
 			// ---------- PRIVATE IMPLEMENTATION ----------
@@ -83,16 +87,14 @@ namespace vsl_application
 				vsl_library::Gfx_Command *GetCmd(VOID);
 				vsl_library::Gfx_D3dx    *GetD3D(VOID);
 				vsl_library::Gfx_Log     *GetLog(VOID);
-
 				vsl_library::Gfx_Element_Engine *GetGEE(VOID);
-				vsl_library::Gfx_Kandinsky      *GetKandinsky(VOID);
 
 			// ---------- UPDATE ----------
 
 			// ---- update state and text overlay
-				VOID Update_Gfx_Command_Param(VOID);
-				VOID Update_If_AsyncKey_Pressed(VOID);
-				VOID Update_On_Screen_Text(VOID);
+				virtual VOID Update_Gfx_Command_Param(VOID);
+				virtual VOID Update_If_AsyncKey_Pressed(VOID);
+				virtual VOID Update_On_Screen_Text(VOID);
 
 		private:
 

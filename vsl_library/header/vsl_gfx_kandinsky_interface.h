@@ -40,6 +40,8 @@ namespace vsl_library
 			static HRESULT AppendColourParameters(Gfx_Element *component_param_group);
 			static HRESULT AppendTransformParameters(Gfx_Element *component_param_group);
 
+		// ---- Add a New Kandinsky Component
+
 		// ---- cuboid - vertex buffer version 
 			static HRESULT Cuboid_VBO_Config_Kandinsky_Parameters(Gfx_Element *component_param_group);
 			static HRESULT Cuboid_VBO_Config_Kandinsky_Component(Gfx_Element_Component *gfx_element_component);

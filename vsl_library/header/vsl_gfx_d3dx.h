@@ -30,7 +30,7 @@ namespace vsl_library
 		class Gfx_D3dx
 		{
 
-			public:
+		public:
 
 			// ---- cdtor
 				Gfx_D3dx();

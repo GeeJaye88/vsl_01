@@ -279,7 +279,6 @@
     <Image Include="icons\icon_32.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="vsl_application\framework\header\vsl_notes.h" />
     <ClInclude Include="vsl_application\framework\header\vsl_base_01.h" />
     <ClInclude Include="vsl_application\framework\header\vsl_pyrhodo_01.h" />
     <ClInclude Include="vsl_application\framework\header\vsl_surface_01.h" />
@@ -300,12 +299,14 @@
     <ClInclude Include="vsl_library\header\vsl_gfx_kandinsky.h" />
     <ClInclude Include="vsl_library\header\vsl_gfx_kandinsky_interface.h" />
     <ClInclude Include="vsl_library\header\vsl_gfx_log.h" />
+    <ClInclude Include="vsl_library\header\vsl_gfx_panel.h" />
     <ClInclude Include="vsl_library\header\vsl_sem.h" />
     <ClInclude Include="vsl_library\header\vsl_gfx_dotobj.h" />
-    <ClInclude Include="vsl_library\hpp_obj\vsl_gfx_kandinsky_notes.hpp" />
     <ClInclude Include="vsl_library\hpp_obj\vsl_gfx_kandinsky_cuboid_vibo.hpp" />
     <ClInclude Include="vsl_library\hpp_obj\vsl_gfx_kandinsky_cuboid_vbo.hpp" />
     <ClInclude Include="vsl_library\hpp_obj\vsl_gfx_kandinsky_pyrhodo_vbo.hpp" />
+    <ClInclude Include="vsl_notes\header\vsl_notes_on_gfx_kandinsky.hpp" />
+    <ClInclude Include="vsl_notes\header\vsl_notes_on_shared_pointer_pimpl.h" />
     <ClInclude Include="vsl_resource\vsl_resource.h" />
     <ClInclude Include="vsl_system\header\vsl_win_framework.h" />
     <ClInclude Include="vsl_system\header\vsl_include.h" />
@@ -334,6 +335,7 @@
     <ClCompile Include="vsl_library\source\vsl_gfx_kandinsky_interface.cpp" />
     <ClCompile Include="vsl_library\source\vsl_gfx_dotobj.cpp" />
     <ClCompile Include="vsl_library\source\vsl_gfx_log.cpp" />
+    <ClCompile Include="vsl_library\source\vsl_gfx_panel.cpp" />
     <ClCompile Include="vsl_system\source\vsl_win_framework.cpp" />
     <ClCompile Include="vsl_system\source\vsl_win_structs.cpp" />
   </ItemGroup>

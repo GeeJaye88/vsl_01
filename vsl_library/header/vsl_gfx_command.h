@@ -8,20 +8,37 @@
 
 \note example usage:
 
-application methods required by framework:
+for vsl_application (see Base_01 class) these methods are required:
 
-	VOID Fw_Set_MouseLeftButtonDownMove(INT, INT);
+	LRESULT CALLBACK Win_Process
+		-> g_app -> VOID Fw_Set_MouseLeftButtonDownMove(INT, INT);
+			-> gfx_command -> VOID SetMouseLeftButtonDownMove((FLOAT)x, (FLOAT)y);
 
-		-> invokes ->SetMouseLeftButtonDownMove((FLOAT)x, (FLOAT)y);
+	LRESULT CALLBACK Win_Process
+		-> g_app -> VOID Fw_Set_MouseWheelClick(INT);
+			-> gfx_command -> GetMouseWheelClick();
+				mouse_wheel_click += (FLOAT)d;
+					-> gfx_command -> VOID SetMouseWheelClick(mouse_wheel_click);
 
-	VOID Fw_Set_MouseWheelClick(INT);
-		-> Invokes ->GetMouseWheelClick();
-			mouse_wheel_click += (FLOAT)d;
-			->SetMouseWheelClick(mouse_wheel_click);
+	LRESULT CALLBACK Win_Process
+		-> g_app -> VOID Fw_Set_Keydown(WPARAM param);
+			-> gfx_command -> VOID SetToggle((CHAR)param);
 
-	VOID Fw_Set_Keydown(WPARAM param);
 
-		-> invokes ->SetToggle((CHAR)param);
+\note in NON vsl_applications, the above is handled by vsl_system::WinEngine::, e.g.,
+
+
+	LRESULT CALLBACK Win_Process
+		-> g_app -> VOID Fw_Set_MouseLeftButtonDownMove(INT, INT);
+			-> vsl_system::WinEngine::
+
+	LRESULT CALLBACK Win_Process
+		-> g_app -> VOID Fw_Set_MouseWheelClick(INT);
+			-> vsl_system::WinEngine::
+
+	LRESULT CALLBACK Win_Process
+		-> g_app -> VOID Fw_Set_Keydown(WPARAM param);
+			-> vsl_system::WinEngine::
 
 */  
 

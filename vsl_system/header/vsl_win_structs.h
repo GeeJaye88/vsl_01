@@ -86,6 +86,7 @@ namespace vsl_system
 			Win_Engine(VOID);
 			~Win_Engine();
 
+		// ---- display
 			VOID  SetFps(UINT fps);
 			VOID  SetFpsNow(UINT fps_now);
 			VOID  SetColour(UINT r, UINT g, UINT b);
@@ -95,6 +96,7 @@ namespace vsl_system
 			std::string GetFpsReport(VOID);
 			UINT  GetRed(VOID), GetGreen(VOID), GetBlue(VOID);
 
+		// ---- time
 			VOID  SetMsStart(FLOAT ms_start);
 			VOID  SetMsDelta(FLOAT ms_delta);
 			VOID  SetMsElapsed(FLOAT ms_elapsed);
@@ -112,21 +114,36 @@ namespace vsl_system
 			VOID  SetRegulated(BOOL regulated);
 			BOOL  GetRegulated(VOID);
 
+		// ---- device
+
 			/*
-				note: these are non vsl_library legcacy methods
-
-				      vsl_library uses Gfx_Command struct
-
+				note: these are non vsl_library legacy methods,
+				used by applications NOT based on vsl_application
 			*/
-
 			VOID  SetMouseLeftButtonDownMove(INT mouse_move_x, INT mouse_move_y);
 			VOID  SetMouseWheelClickDelta(INT wheel_click_delta);
-			VOID  SetKeydown(INT keydown);
-
+			// not used!
 			INT   GetMouseLeftButtonDownX(VOID);
 			INT   GetMouseLeftButtonDownY(VOID);
 			INT   GetMouseWheelClickDelta(VOID);
-			INT   GetKeydown(VOID);
+
+			/*
+				note: used in windows framework Win_Process function
+				to acquire text input
+			*/
+			VOID  SetKeyDown(INT key_down);
+			VOID  SetKeyShift(INT key_shift);
+			INT   GetKeyDown(VOID);
+			INT   GetKeyShift(VOID);
+
+			/*
+				note: command line interface
+			*/
+			VOID  SetCmdLineMode(BOOL mode);
+			BOOL  GetCmdLineMode(VOID);
+
+			std::string GetCmdLine();
+			VOID SetCmdLine(std::string line);
 
 		private:
 
