@@ -189,7 +189,7 @@
     <ClInclude Include="vsl_notes\header\vsl_notes_on_shared_pointer_pimpl.h">
       <Filter>vsl_notes\header</Filter>
     </ClInclude>
-    <ClInclude Include="vsl_library\header\vsl_gfx_panel.h">
+    <ClInclude Include="vsl_library\header\vsl_gfx_frameset.h">
       <Filter>vsl_library\header</Filter>
     </ClInclude>
   </ItemGroup>
@@ -259,7 +259,7 @@
     <ClCompile Include="vsl_library\source\vsl_gfx_kandinsky_interface.cpp">
       <Filter>vsl_library\source</Filter>
     </ClCompile>
-    <ClCompile Include="vsl_library\source\vsl_gfx_panel.cpp">
+    <ClCompile Include="vsl_library\source\vsl_gfx_frameset.cpp">
       <Filter>vsl_library\source</Filter>
     </ClCompile>
   </ItemGroup>

@@ -24,6 +24,7 @@
 	#include "../../vsl_library/header/vsl_gfx_kandinsky.h"
 	#include "../../vsl_library/header/vsl_gfx_command.h"
 	#include "../../vsl_library/header/vsl_gfx_d3dx.h"
+	#include "../../vsl_library/header/vsl_gfx_frameset.h"
 	#include "../../vsl_library/header/vsl_gfx_log.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -84,10 +85,11 @@ namespace vsl_application
 				vsl_system::Win_Engine *Get_Win_Engine(VOID);
 
 			// ---- get gfx objects
-				vsl_library::Gfx_Command *GetCmd(VOID);
-				vsl_library::Gfx_D3dx    *GetD3D(VOID);
-				vsl_library::Gfx_Log     *GetLog(VOID);
-				vsl_library::Gfx_Element_Engine *GetGEE(VOID);
+				vsl_library::Gfx_Command        *GetCommand(VOID);
+				vsl_library::Gfx_D3dx           *GetD3dx(VOID);
+				vsl_library::Gfx_Log            *GetLog(VOID);
+				vsl_library::Gfx_Frameset       *GetFrameset(VOID);
+				vsl_library::Gfx_Element_Engine *GetElementEngine(VOID);
 
 			// ---------- UPDATE ----------
 

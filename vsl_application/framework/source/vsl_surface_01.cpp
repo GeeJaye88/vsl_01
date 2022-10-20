@@ -46,7 +46,7 @@ HRESULT Surface_01::Gfx_Setup_Project(VOID)
 
 			// ---- assemble test data
 				Gfx_Element *engine_root_element = NULL;
-				if (engine_root_element = GetGEE()->GetEngineRoot())
+				if (engine_root_element = GetElementEngine()->GetEngineRoot())
 				{
 					if (Gfx_Element *project = engine_root_element->Find("Project"))
 					{
@@ -60,10 +60,10 @@ HRESULT Surface_01::Gfx_Setup_Project(VOID)
 							 
 						// ---- group id 1 : element id 4 (or could be 3!)
 							Gfx_Element *element_group_1 = project->Append("G1", 1);
-							GetGEE()->AddBookMark(element_group_1);
+							GetElementEngine()->AddBookMark(element_group_1);
 							{
 								Gfx_Element *element_tr1 = element_group_1->Append("TR1", 4);
-								GetGEE()->AddBookMark(element_tr1);
+								GetElementEngine()->AddBookMark(element_tr1);
 
 								Gfx_Element_Configure *configure = element_tr1->GetConfigure();
 								configure->SetComponentName("Cuboid_VBO");
@@ -74,10 +74,10 @@ HRESULT Surface_01::Gfx_Setup_Project(VOID)
 
 						// ---- group id 2 : element id 4
 							Gfx_Element *element_group_2 = project->Append("G2", 2);
-							GetGEE()->AddBookMark(element_group_2);
+							GetElementEngine()->AddBookMark(element_group_2);
 							{
 								Gfx_Element *element_tr2 = element_group_2->Append("TR2", 4);
-								GetGEE()->AddBookMark(element_tr2);
+								GetElementEngine()->AddBookMark(element_tr2);
 
 								Gfx_Element_Configure *configure = element_tr2->GetConfigure();
 								configure->SetComponentName("Cuboid_VIBO");
@@ -130,7 +130,7 @@ HRESULT Surface_01::Gfx_Setup_Coordinates(VOID)
 		using namespace vsl_library;
 
 	// ---------- update element properties & parameters ----------
-		Gfx_Element *engine_root_element = GetGEE()->GetEngineRoot();
+		Gfx_Element *engine_root_element = GetElementEngine()->GetEngineRoot();
 
 	// ---------- update element coordinate properties ----------
 		Gfx_Element *element_tr1 = engine_root_element->Find("TR1");
@@ -157,7 +157,7 @@ HRESULT Surface_01::Gfx_Setup_Components(VOID)
 		using namespace vsl_library;
 
 	// ---------- update element properties & parameters ----------
-		Gfx_Element *engine_root_element = GetGEE()->GetEngineRoot();
+		Gfx_Element *engine_root_element = GetElementEngine()->GetEngineRoot();
 		Gfx_Element *element_tr0 = engine_root_element->Find("TR0");
 		if (element_tr0 != NULL)
 		{
@@ -207,7 +207,7 @@ HRESULT Surface_01::Gfx_Element_Bookmarks(VOID)
 				FLOAT rotate = to_radian(time_elapsed / 10);
 
 			// ---- bookmarks
-				std::list<vsl_library::Gfx_Element *>bookmarks = GetGEE()->GetBookMarks();
+				std::list<vsl_library::Gfx_Element *>bookmarks = GetElementEngine()->GetBookMarks();
 				std::list<Gfx_Element *>::iterator bookmarks_begin = bookmarks.begin();
 				std::list<Gfx_Element *>::iterator bookmarks_end = bookmarks.end();
 
@@ -233,7 +233,7 @@ HRESULT Surface_01::Gfx_Element_Bookmarks(VOID)
 						case 4:
 							{
 								FLOAT t_value = 0;
-								GetCmd()->GetToggleValue((CHAR)'T', &t_value);
+								GetCommand()->GetToggleValue((CHAR)'T', &t_value);
 								coordinate->SetRotate(vsl_system::Vsl_Vector3(0, to_radian(t_value), 0));
 							}
 							break;
@@ -258,10 +258,10 @@ VOID Surface_01::Update_If_AsyncKey_Pressed(VOID)
 
 	// ---- global
 		vsl_system::Win_Engine *win_eng = Get_Win_Engine();
-		vsl_library::Gfx_Command *gfx_com = GetCmd();
+		vsl_library::Gfx_Command *gfx_command = GetCommand();
 
 	// ---- local
-		DWORD key_just_pressed = gfx_com->GetKeyJustPressed() & 0x8000f;
+		DWORD key_just_pressed = gfx_command->GetKeyJustPressed() & 0x8000f;
 
 	// ---- check async
 		if (GetAsyncKeyState(';') & 0x8000f)
@@ -295,7 +295,7 @@ VOID Surface_01::Update_On_Screen_Text(VOID)
 	// ---- position text (left, top, right, bottom)
 
 		RECT rct = { 20, 20, 700, 40 };
-		hr = GetD3D()->DisplayText(
+		hr = GetD3dx()->DisplayText(
 				Get_Win_Create()->GetName(),
 				colour,
 				rct
@@ -303,7 +303,7 @@ VOID Surface_01::Update_On_Screen_Text(VOID)
 
 		rct.top += 20;
 		rct.bottom += 20;
-		hr = GetD3D()->DisplayText(
+		hr = GetD3dx()->DisplayText(
 				Get_Win_Engine()->GetFpsReport(),
 				colour,
 				rct
@@ -324,7 +324,7 @@ VOID Surface_01::Update_On_Screen_Text(VOID)
 			std::string line_number(buffer);
 
 			std::string line_text = "take sword";
-			hr = GetD3D()->DisplayText(
+			hr = GetD3dx()->DisplayText(
 					line_number + ": " + line_text,
 					colour,
 					rct

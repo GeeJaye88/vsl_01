@@ -299,7 +299,7 @@
     <ClInclude Include="vsl_library\header\vsl_gfx_kandinsky.h" />
     <ClInclude Include="vsl_library\header\vsl_gfx_kandinsky_interface.h" />
     <ClInclude Include="vsl_library\header\vsl_gfx_log.h" />
-    <ClInclude Include="vsl_library\header\vsl_gfx_panel.h" />
+    <ClInclude Include="vsl_library\header\vsl_gfx_frameset.h" />
     <ClInclude Include="vsl_library\header\vsl_sem.h" />
     <ClInclude Include="vsl_library\header\vsl_gfx_dotobj.h" />
     <ClInclude Include="vsl_library\hpp_obj\vsl_gfx_kandinsky_cuboid_vibo.hpp" />
@@ -335,7 +335,7 @@
     <ClCompile Include="vsl_library\source\vsl_gfx_kandinsky_interface.cpp" />
     <ClCompile Include="vsl_library\source\vsl_gfx_dotobj.cpp" />
     <ClCompile Include="vsl_library\source\vsl_gfx_log.cpp" />
-    <ClCompile Include="vsl_library\source\vsl_gfx_panel.cpp" />
+    <ClCompile Include="vsl_library\source\vsl_gfx_frameset.cpp" />
     <ClCompile Include="vsl_system\source\vsl_win_framework.cpp" />
     <ClCompile Include="vsl_system\source\vsl_win_structs.cpp" />
   </ItemGroup>

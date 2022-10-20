@@ -38,9 +38,10 @@ class Base_01::Pimpl_Base_01
 		vsl_system::Win_Engine fw_win_engine;
 
 	// ---- required gfx:
-		vsl_library::Gfx_Command gfx_command;
-		vsl_library::Gfx_D3dx    gfx_d3dx;
-		vsl_library::Gfx_Log     gfx_log;
+		vsl_library::Gfx_Command  gfx_command;
+		vsl_library::Gfx_D3dx     gfx_d3dx;
+		vsl_library::Gfx_Frameset gfx_frameset;
+		vsl_library::Gfx_Log      gfx_log;
 
 		vsl_library::Gfx_Element_Engine gfx_element_engine;
 
@@ -61,41 +62,82 @@ Base_01::Base_01(VOID) : pimpl_base_v01(new Pimpl_Base_01)
 	// ---- local
 		HRESULT hr;
 
-	// ---- win: Win_Create - get & initialise window create struct 
-		vsl_system::Win_Create *win_cr8 = Get_Win_Create();
+	using namespace vsl_system;
+
+	// ---- Windows Framework
+
+	// ---- Win_Create - get & initialise window create struct 
+		Win_Create *win_cr8 = Get_Win_Create();
 		win_cr8->SetName("Base_01");
 		win_cr8->SetCentred(TRUE);
 		win_cr8->SetDesktop(FALSE);
 		win_cr8->SetDimensions(800,600);
 		win_cr8->SetAaq(4);
 
-	// ---- win: Get_Win_Engine - get & initialise windows engine struct
-		vsl_system::Win_Engine *win_eng = Get_Win_Engine();
+	// ---- Get_Win_Engine - get & initialise windows engine struct
+		Win_Engine *win_eng = Get_Win_Engine();
 		win_eng->SetColour(92, 92, 92);
 		win_eng->SetFps(60);
 
-	// ---- gfx: Gfx_Command (IO)
-		vsl_library::Gfx_Command *gfx_com = GetCmd();
-		gfx_com->SetDefaultMouseWheelClick(-50);
-		hr = gfx_com->SetToggle((CHAR)'T');
+	using namespace vsl_library;
 
-	// ---- gfx: Gfx_D3dx (Direct 3D)
-		vsl_library::Gfx_D3dx *gfx_d3dx = GetD3D();
+	// ---- Graphics (Gfx)
+
+	// ---- Command (IO)
+		Gfx_Command *gfx_command = GetCommand();
+		gfx_command->SetDefaultMouseWheelClick(-50);
+		hr = gfx_command->SetToggle((CHAR)'T');
+
+	// ---- D3dx (Direct 3D)
+		Gfx_D3dx *gfx_d3dx = GetD3dx();
 		gfx_d3dx->Set_Win_Create(win_cr8);
-		gfx_d3dx->Set_Gfx_Command(gfx_com);
+		gfx_d3dx->Set_Gfx_Command(gfx_command);
 
-	// ---- gfx: Gfx_Log
-		vsl_library::Gfx_Log *gfx_log = GetLog();
+	// ---- Gfx_Log
+		Gfx_Log *gfx_log = GetLog();
 		gfx_log->SetShowLineNumber(TRUE);
 		gfx_log->SetShowDate(FALSE);
 		gfx_log->SetShowTime(TRUE);
 		gfx_log->SetShowSimple(FALSE);
 
-	// ---- gfx: Gfx_Log - write this app name
+	// ---- Gfx_Log - write this app name
 		hr = gfx_log->WriteBanner(win_cr8->GetName());
 
-	// ---- gfx: Gfx_Element_Engine
-		vsl_library::Gfx_Element_Engine *gfx_gee = GetGEE();
+	// ---- Gfx_Frameset
+
+		Gfx_Box frame_box = { 0.1f, 0.1f, 0.9f, 0.9f };
+		Gfx_Spacing frame_margin  = {  2,  2,  2,  2 };
+		Gfx_Spacing frame_border  = { 10, 10, 10, 10 };
+		Gfx_Spacing frame_padding = {  4,  4,  4,  4 };
+		Gfx_Content frame_content;
+
+		Gfx_Frameset *gfx_frameset = GetFrameset();
+
+		Gfx_Frame *frame = gfx_frameset->AddFrame("Frame");
+			frame->SetBox(&frame_box);
+			frame->SetSpacing(Gfx_Spacing_Type::MARGIN, &frame_margin);
+			frame->SetSpacing(Gfx_Spacing_Type::BORDER, &frame_border);
+			frame->SetSpacing(Gfx_Spacing_Type::PADDING, &frame_padding);
+
+		Gfx_Frame *cf1 = frame->AddChildFrame("CF1");
+			cf1->SetSpacing(Gfx_Spacing_Type::BORDER, &frame_border);
+			cf1->SetSpacing(Gfx_Spacing_Type::MARGIN, &frame_margin);
+			cf1->SetSpacing(Gfx_Spacing_Type::PADDING, &frame_padding);
+			
+		Gfx_Frame *cf2 = frame->AddChildFrame("CF2");
+			cf2->SetSpacing(Gfx_Spacing_Type::BORDER, &frame_border);
+
+		Gfx_Frame *cf3 = frame->AddChildFrame("CF3");
+			cf3->SetSpacing(Gfx_Spacing_Type::BORDER, &frame_border);
+
+			cf3->GetContent(&frame_content);
+
+		gfx_frameset->SetGfxLog(gfx_log);
+
+		gfx_frameset->Setup();
+
+	// ---- Gfx_Element_Engine
+		Gfx_Element_Engine *gfx_gee = GetElementEngine();
 		gfx_gee->SetGfxLog(gfx_log);
 }
 
@@ -108,18 +150,24 @@ Base_01::~Base_01()
 ////////////////////////////////////////////////////////////////////////////////
 
 
-// ---- private implementation interface
+// ---- private implementation objectinterface
 
 // ---- get Win structs
 	vsl_system::Win_Create  *Base_01::Get_Win_Create(VOID) { return &pimpl_base_v01->fw_win_create; }
 	vsl_system::Win_Engine  *Base_01::Get_Win_Engine(VOID) { return &pimpl_base_v01->fw_win_engine; }
 
 // ---- get Gfx objects
-	vsl_library::Gfx_Command *Base_01::GetCmd(VOID) { return &pimpl_base_v01->gfx_command; }
-	vsl_library::Gfx_D3dx    *Base_01::GetD3D(VOID) { return &pimpl_base_v01->gfx_d3dx; }
-	vsl_library::Gfx_Log     *Base_01::GetLog(VOID) { return &pimpl_base_v01->gfx_log; }
-	vsl_library::Gfx_Element_Engine *Base_01::GetGEE(VOID) { return &pimpl_base_v01->gfx_element_engine; }
+	vsl_library::Gfx_Command *Base_01::GetCommand(VOID) { return &pimpl_base_v01->gfx_command; }
 
+	vsl_library::Gfx_D3dx *Base_01::GetD3dx(VOID) { return &pimpl_base_v01->gfx_d3dx; }
+
+	vsl_library::Gfx_Log *Base_01::GetLog(VOID) { return &pimpl_base_v01->gfx_log; }
+
+	vsl_library::Gfx_Frameset *Base_01::GetFrameset(VOID)
+		{ return &pimpl_base_v01->gfx_frameset; }
+
+	vsl_library::Gfx_Element_Engine *Base_01::GetElementEngine(VOID)
+		{ return &pimpl_base_v01->gfx_element_engine; }
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -144,7 +192,7 @@ HRESULT Base_01::Fw_Setup(VOID)
 		using namespace vsl_library;
 
 	// ---- device
-		hr = GetD3D()->Setup();
+		hr = GetD3dx()->Setup();
 		if (FAILED(hr)) return ERROR_FAIL;
 
 	// ---- setup & config hierarchical project structure
@@ -152,7 +200,7 @@ HRESULT Base_01::Fw_Setup(VOID)
 		if (FAILED(hr)) return ERROR_FAIL;
 
 	// ---- recursively setup elements, element instancing & verify kandinsky component
-		hr = GetGEE()->Setup();
+		hr = GetElementEngine()->Setup();
 		if (FAILED(hr)) return ERROR_FAIL;
 
 	// ---- setup specific element coordinate values
@@ -181,11 +229,11 @@ HRESULT Base_01::Fw_SetupDX(LPDIRECT3DDEVICE9 device)
 		HRESULT hr;
 
 	// ---- d3d
-		hr = GetD3D()->SetupDX(device);
+		hr = GetD3dx()->SetupDX(device);
 		if (FAILED(hr)) return hr;
 
 	// ---- setup DX gfx element engine
-		hr = GetGEE()->SetupDX(device);
+		hr = GetElementEngine()->SetupDX(device);
 		if (FAILED(hr)) return hr;
 
 	// --- ?
@@ -243,15 +291,15 @@ HRESULT Base_01::Fw_Display(LPDIRECT3DDEVICE9 device)
 		if (FAILED(hr)) return ERROR_FAIL;
 
 	// ---- d3d (no fail conditions)
-		hr = GetD3D()->Projection(device);
-		hr = GetD3D()->LookAtLH(device);
+		hr = GetD3dx()->Projection(device);
+		hr = GetD3dx()->LookAtLH(device);
 
 	// ---- set render states and lighting
-		hr = GetD3D()->Display(device);
+		hr = GetD3dx()->Display(device);
 		if (FAILED(hr)) return ERROR_FAIL;
 
 	// ---- recursively display gfx elements
-		hr = GetGEE()->Display();
+		hr = GetElementEngine()->Display();
 		if (FAILED(hr)) return ERROR_FAIL;
 
 	return SUCCESS_OK;
@@ -262,12 +310,13 @@ HRESULT Base_01::Gfx_Setup_Viewrect(LPDIRECT3DDEVICE9 device)
 {
 
 	// ---- local
-		HRESULT hr;
-
 		IDirect3DDevice9 *d3d9_device = device;
 
 	// ---- get client adjusted viewrect
-		Vs_FloatRectangle viewrect = { 100, 100, 500, 500};
+		UINT width = pimpl_base_v01->fw_win_create.GetWidth();
+		UINT height = pimpl_base_v01->fw_win_create.GetHeight();
+
+		Vs_FloatRectangle viewrect = { 0, 0, (FLOAT)width, (FLOAT)height };
 
 	// ---- set viewport
 		D3DVIEWPORT9 fvp;
@@ -298,11 +347,11 @@ HRESULT Base_01::Fw_CleanupDX (LPDIRECT3DDEVICE9 device)
 		HRESULT hr;
 
 	//---- d3d
-		hr = GetD3D()->CleanupDX(device);
+		hr = GetD3dx()->CleanupDX(device);
 		if (FAILED(hr)) return ERROR_FAIL;
 
 	// ---- cleanup DX gfx element engine
-		hr = GetGEE()->CleanupDX();
+		hr = GetElementEngine()->CleanupDX();
 		if (FAILED(hr)) return ERROR_FAIL;
 
 	return SUCCESS_OK;
@@ -319,7 +368,7 @@ HRESULT Base_01::Fw_Cleanup(VOID)
 {
 	
 // ---- cleanup gfx element engine
-	HRESULT hr = GetGEE()->Cleanup();
+	HRESULT hr = GetElementEngine()->Cleanup();
 	if (FAILED(hr)) return ERROR_FAIL;
 
 	return SUCCESS_OK;
@@ -371,7 +420,7 @@ VOID Base_01::Fw_Get_Win_Engine(vsl_system::Win_Engine **fw_win_engine)
 */
 VOID Base_01::Fw_Set_MouseLeftButtonDownMove(INT x, INT y)
 {
-	GetCmd()->SetMouseLeftButtonDownMove((FLOAT)x, (FLOAT)y);
+	GetCommand()->SetMouseLeftButtonDownMove((FLOAT)x, (FLOAT)y);
 }
 
 
@@ -383,10 +432,10 @@ VOID Base_01::Fw_Set_MouseLeftButtonDownMove(INT x, INT y)
 */
 VOID Base_01::Fw_Set_MouseWheelClick(INT d)
 {
-	FLOAT mouse_wheel_click = GetCmd()->GetMouseWheelClick();
+	FLOAT mouse_wheel_click = GetCommand()->GetMouseWheelClick();
 	mouse_wheel_click += (FLOAT)d;
 
-	GetCmd()->SetMouseWheelClick(mouse_wheel_click);
+	GetCommand()->SetMouseWheelClick(mouse_wheel_click);
 }
 
 
@@ -398,7 +447,7 @@ VOID Base_01::Fw_Set_MouseWheelClick(INT d)
 */
 VOID Base_01::Fw_Set_Keydown(WPARAM param)
 {
-	GetCmd()->SetToggle((CHAR)param);
+	GetCommand()->SetToggle((CHAR)param);
 }
 
 
@@ -422,7 +471,7 @@ HRESULT Base_01::Gfx_Setup_Project(VOID)
 
 			// ---- assemble test data
 				Gfx_Element *engine_root_element = NULL;
-				if (engine_root_element = GetGEE()->GetEngineRoot())
+				if (engine_root_element = GetElementEngine()->GetEngineRoot())
 				{
 					if (Gfx_Element *project = engine_root_element->Find("Project"))
 					{
@@ -436,10 +485,10 @@ HRESULT Base_01::Gfx_Setup_Project(VOID)
 							 
 						// ---- group id 1 : element id 4 (or could be 3!)
 							Gfx_Element *element_group_1 = project->Append("G1", 1);
-							GetGEE()->AddBookMark(element_group_1);
+							GetElementEngine()->AddBookMark(element_group_1);
 							{
 								Gfx_Element *element_tr1 = element_group_1->Append("TR1", 4);
-								GetGEE()->AddBookMark(element_tr1);
+								GetElementEngine()->AddBookMark(element_tr1);
 
 								Gfx_Element_Configure *configure = element_tr1->GetConfigure();
 								configure->SetComponentName("Cuboid_VBO");
@@ -450,10 +499,10 @@ HRESULT Base_01::Gfx_Setup_Project(VOID)
 
 						// ---- group id 2 : element id 4
 							Gfx_Element *element_group_2 = project->Append("G2", 2);
-							GetGEE()->AddBookMark(element_group_2);
+							GetElementEngine()->AddBookMark(element_group_2);
 							{
 								Gfx_Element *element_tr2 = element_group_2->Append("TR2", 4);
-								GetGEE()->AddBookMark(element_tr2);
+								GetElementEngine()->AddBookMark(element_tr2);
 
 								Gfx_Element_Configure *configure = element_tr2->GetConfigure();
 								configure->SetComponentName("Cuboid_VIBO");
@@ -506,7 +555,7 @@ HRESULT Base_01::Gfx_Setup_Coordinates(VOID)
 		using namespace vsl_library;
 
 	// ---------- update element component properties & parameters ----------
-		Gfx_Element *engine_root_element = GetGEE()->GetEngineRoot();
+		Gfx_Element *engine_root_element = GetElementEngine()->GetEngineRoot();
 
 	// ---------- update element coordinate properties ----------
 		Gfx_Element *element_tr1 = engine_root_element->Find("TR1");
@@ -533,7 +582,7 @@ HRESULT Base_01::Gfx_Setup_Components(VOID)
 		using namespace vsl_library;
 
 	// ---------- update element properties & parameters ----------
-		Gfx_Element *engine_root_element = GetGEE()->GetEngineRoot();
+		Gfx_Element *engine_root_element = GetElementEngine()->GetEngineRoot();
 		Gfx_Element *element_tr0 = engine_root_element->Find("TR0");
 		if (element_tr0 != NULL)
 		{
@@ -583,7 +632,7 @@ HRESULT Base_01::Gfx_Element_Bookmarks(VOID)
 				FLOAT rotate = to_radian(time_elapsed / 10);
 
 			// ---- bookmarks
-				std::list<vsl_library::Gfx_Element *>bookmarks = GetGEE()->GetBookMarks();
+				std::list<vsl_library::Gfx_Element *>bookmarks = GetElementEngine()->GetBookMarks();
 				std::list<Gfx_Element *>::iterator bookmarks_begin = bookmarks.begin();
 				std::list<Gfx_Element *>::iterator bookmarks_end = bookmarks.end();
 
@@ -609,7 +658,7 @@ HRESULT Base_01::Gfx_Element_Bookmarks(VOID)
 						case 4:
 							{
 								FLOAT t_value = 0;
-								GetCmd()->GetToggleValue((CHAR)'T', &t_value);
+								GetCommand()->GetToggleValue((CHAR)'T', &t_value);
 								coordinate->SetRotate(vsl_system::Vsl_Vector3(0, to_radian(t_value), 0));
 							}
 							break;
@@ -653,7 +702,7 @@ VOID Base_01::Gfx_Read_Project_SDL(VOID)
 */
 VOID Base_01::Update_Gfx_Command_Param(VOID)
 {
-	GetCmd()->Update(
+	GetCommand()->Update(
 			Get_Win_Engine()->GetMsDelta()
 		);
 }
@@ -668,8 +717,8 @@ VOID Base_01::Update_If_AsyncKey_Pressed(VOID)
 {
 
 	// ---- store
-		vsl_library::Gfx_Command *gfx_com = GetCmd();
-		gfx_com->SetKeyLastPressed(gfx_com->GetKeyJustPressed());
+		vsl_library::Gfx_Command *gfx_command = GetCommand();
+		gfx_command->SetKeyLastPressed(gfx_command->GetKeyJustPressed());
 
 	// ---- local
 		DWORD  key_just_pressed = 0;
@@ -701,7 +750,7 @@ VOID Base_01::Update_If_AsyncKey_Pressed(VOID)
 			key_just_pressed = 0;
 
 	// ---- store
-		gfx_com->SetKeyJustPressed(key_just_pressed);
+		gfx_command->SetKeyJustPressed(key_just_pressed);
 
 	// ---- not pressed ?
 		if (key_just_pressed == 0 )
@@ -729,7 +778,7 @@ VOID Base_01::Update_If_AsyncKey_Pressed(VOID)
 				Sleep(250);
 				break;
 			case 'X':
-				gfx_com->Reset();
+				gfx_command->Reset();
 				break;
 			default:
 				break;
@@ -759,7 +808,7 @@ VOID Base_01::Update_On_Screen_Text(VOID)
 	// ---- position text (left, top, right, bottom)
 
 		RECT rct = { 20, 20, 700, 40 };
-		hr = GetD3D()->DisplayText(
+		hr = GetD3dx()->DisplayText(
 				Get_Win_Create()->GetName(),
 				colour,
 				rct
@@ -768,7 +817,7 @@ VOID Base_01::Update_On_Screen_Text(VOID)
 		rct.top = Get_Win_Create()->GetHeight() - 80;
 
 		rct.bottom = rct.top + 20;
-		hr = GetD3D()->DisplayText(
+		hr = GetD3dx()->DisplayText(
 				Get_Win_Engine()->GetFpsReport(),
 				colour,
 				rct

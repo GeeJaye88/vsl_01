@@ -1,0 +1,36 @@
+
+// ---------- Private Implementation of Gfx_Frame::Pimpl_Gfx_Frame class ----------
+
+class Gfx_Frame::Pimpl_Gfx_Frame
+{
+
+	public:
+
+		// ---- constructor/destructor ----
+		Pimpl_Gfx_Frame() { ; }
+		~Pimpl_Gfx_Frame() { ; }
+
+		Gfx_Panel * GetPanel(std::string name)
+		{
+			for (std::list<Gfx_Panel>::iterator it = list_of_gfx_panels.begin(); it != list_of_gfx_panels.end(); it++)
+			{
+				// ---- get a pointer (this is the important bit!)
+				if ((it->getName()) == name)
+					return &*it;
+			}
+			return 0;
+		}
+
+		Gfx_Panel * AddPanel(std::string name)
+		{
+			std::list < Gfx_Panel > gfx_panels;
+			gfx_panels.push_back(name);
+			list_of_gfx_panels.push_back(name);
+			return &list_of_gfx_panels.back();
+		}
+
+	private:
+
+		std::list < Gfx_Panel > list_of_gfx_panels;
+
+};
