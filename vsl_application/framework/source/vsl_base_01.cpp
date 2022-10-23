@@ -105,32 +105,35 @@ Base_01::Base_01(VOID) : pimpl_base_v01(new Pimpl_Base_01)
 
 	// ---- Gfx_Frameset
 
-		Gfx_Box frame_box = { 0.1f, 0.1f, 0.9f, 0.9f };
-		Gfx_Spacing frame_margin  = {  2,  2,  2,  2 };
-		Gfx_Spacing frame_border  = { 10, 10, 10, 10 };
-		Gfx_Spacing frame_padding = {  4,  4,  4,  4 };
-		Gfx_Content frame_content;
+		Gfx_Frame::Rectangle outside  = { 0.1f, 0.1f, 0.9f, 0.9f };
+		Gfx_Frame::Rectangle outside1 = { 0.1f, 0.1f, 0.5f, 0.5f };
+		Gfx_Frame::Rectangle outside2 = { 0.5f, 0.1f, 0.9f, 0.5f };
+		Gfx_Frame::Rectangle outside3 = { 0.1f, 0.5f, 0.5f, 0.9f };
+
+		Gfx_Frame::Rectangle margin  = {  2,  2,  2,  2 };
+		Gfx_Frame::Rectangle border  = { 10, 10, 10, 10 };
+		Gfx_Frame::Rectangle padding = {  4,  4,  4,  4 };
+		Gfx_Frame::Rectangle inside;
 
 		Gfx_Frameset *gfx_frameset = GetFrameset();
 
+		gfx_frameset->SetDimensions(win_cr8->GetWidth(), win_cr8->GetHeight());
+
 		Gfx_Frame *frame = gfx_frameset->AddFrame("Frame");
-			frame->SetBox(&frame_box);
-			frame->SetSpacing(Gfx_Spacing_Type::MARGIN, &frame_margin);
-			frame->SetSpacing(Gfx_Spacing_Type::BORDER, &frame_border);
-			frame->SetSpacing(Gfx_Spacing_Type::PADDING, &frame_padding);
+			frame->SetFrameRect(Gfx_Frame::TYPE::OUTSIDE, &outside);
+			frame->SetFrameRect(Gfx_Frame::TYPE::MARGIN,  &margin);
+			frame->SetFrameRect(Gfx_Frame::TYPE::BORDER,  &border);
+			frame->SetFrameRect(Gfx_Frame::TYPE::PADDING, &padding);
 
-		Gfx_Frame *cf1 = frame->AddChildFrame("CF1");
-			cf1->SetSpacing(Gfx_Spacing_Type::BORDER, &frame_border);
-			cf1->SetSpacing(Gfx_Spacing_Type::MARGIN, &frame_margin);
-			cf1->SetSpacing(Gfx_Spacing_Type::PADDING, &frame_padding);
-			
-		Gfx_Frame *cf2 = frame->AddChildFrame("CF2");
-			cf2->SetSpacing(Gfx_Spacing_Type::BORDER, &frame_border);
+		Gfx_Frame *cf1 = frame->AddChild("CF1");
+			cf1->SetFrameRect(Gfx_Frame::TYPE::OUTSIDE, &outside1);
+			cf1->SetFrameRect(Gfx_Frame::TYPE::MARGIN, &margin);
 
-		Gfx_Frame *cf3 = frame->AddChildFrame("CF3");
-			cf3->SetSpacing(Gfx_Spacing_Type::BORDER, &frame_border);
+		Gfx_Frame *cf2 = frame->AddChild("CF2");
+			cf2->SetFrameRect(Gfx_Frame::TYPE::OUTSIDE, &outside2);
 
-			cf3->GetContent(&frame_content);
+		Gfx_Frame *cf3 = frame->AddChild("CF3");
+			cf3->SetFrameRect(Gfx_Frame::TYPE::OUTSIDE, &outside3);
 
 		gfx_frameset->SetGfxLog(gfx_log);
 

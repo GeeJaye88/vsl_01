@@ -24,28 +24,9 @@
 namespace vsl_library
 {
 
-	// ---------- Gfx Box & Spacing Properties ----------
-
-	// ---- FLOAT LTRB relative to parent frame (e.g., 0.1,0.1,0.5,0.5)
-		struct Gfx_Box { FLOAT left = 0, top = 0, right = 1, bottom = 1; };
-
-	// ---- UINT LTRB spacing bounded by box in screen ordinates
-		enum Gfx_Spacing_Type
-			{
-				MARGIN,
-				BORDER,
-				PADDING,
-			};
-		struct Gfx_Spacing { UINT left = 0, top = 0, right = 0, bottom = 0; };
-		struct Gfx_Content { UINT left = 1, top = 2, right = 3, bottom = 4; };
-
-
-////////////////////////////////////////////////////////////////////////////////
-			
 		
-	// --- "forward" declarations
+	// --- "forward" declaration
 		class Gfx_Frame;
-		class Gfx_Panel;
 
 	// ---------- Gfx_Frameset class interface ----------
 		class Gfx_Frameset
@@ -57,19 +38,19 @@ namespace vsl_library
 				Gfx_Frameset();
 				~Gfx_Frameset();
 
-			// ---- frames
+			// ---- links
 				Gfx_Frame *AddFrame(std::string name);
 				Gfx_Frame *GetFirst();
 
 			// ---- dimensions
 				HRESULT SetDimensions(UINT width, UINT height);
-				UINT GetWidth();
-				UINT GetHeight();
+				UINT    GetWidth();
+				UINT    GetHeight();
 
-			// ---- calculate frameset
+			// ---- calculate
 				HRESULT Setup();
 
-			// ---- housekeeeping
+			// ---- log & report
 				HRESULT SetGfxLog(Gfx_Log *gfx_log);
 
 		private:
@@ -90,27 +71,49 @@ namespace vsl_library
 
 		public:
 
+			struct Rectangle
+				{
+					FLOAT left = 0, top = 0, right = 0, bottom = 0;
+				};
+
+			enum TYPE
+				{
+					OUTSIDE,    // proportional
+					MARGIN,     // pixels
+					BORDER,     // pixels
+					PADDING,    // pixels
+					INSIDE      // proportional
+				};
+
 			// ---- cdtor
 				Gfx_Frame(std::string name);
 				~Gfx_Frame();
 
+			// ---- general
 				std::string GetName();
-				void SetName(std::string name);
+				VOID        SetName(std::string name);
+				VOID        SetDimensions(UINT width, UINT height);
+				UINT        GetWidth();
+				UINT        GetHeight();
 
 			// ---- links
+				Gfx_Frame * GetParent();
+				VOID        SetParent(Gfx_Frame *parent);
 				Gfx_Frame * GetNext();
-				VOID SetNext(Gfx_Frame *next);
+				VOID        SetNext(Gfx_Frame *next);
 
-			// ---- link
-				Gfx_Frame * AddChildFrame(std::string name);
-				Gfx_Frame * GetFirstChildFrame();
+			// ---- child
+				Gfx_Frame * AddChild(std::string name);
+				Gfx_Frame * GetFirst();
 
-				VOID SetBox(Gfx_Box *box);
-				VOID SetSpacing(
-						Gfx_Spacing_Type type,
-						Gfx_Spacing *spacing
+				VOID SetFrameRect(
+						Gfx_Frame::TYPE type,
+						Gfx_Frame::Rectangle *rect
 					);
-				VOID GetContent(Gfx_Content *content);
+				VOID GetFrameRect(
+						Gfx_Frame::TYPE type,
+						Gfx_Frame::Rectangle *rect
+					);
 
 		private:
 
