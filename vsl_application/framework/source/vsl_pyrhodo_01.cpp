@@ -186,12 +186,12 @@ HRESULT PyRhoDo_01::Gfx_Setup_Components(VOID)
 }
 
 
-// ---------- Gfx_Element_Bookmarks --------
+// ---------- Gfx_Setup_Bookmarks --------
 /*!
-\brief handle gfx elements that have been bookmarked
+\brief setup gfx elements that have been bookmarked
 \author Gareth Edwards
 */
-HRESULT PyRhoDo_01::Gfx_Element_Bookmarks(VOID)
+HRESULT PyRhoDo_01::Gfx_Setup_Bookmarks(VOID)
 {
 
 	// ---- scope

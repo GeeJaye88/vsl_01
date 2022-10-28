@@ -31,7 +31,7 @@
 
 
 // ---- set application token string
-	#define VSL_APP VSL_Base_01
+	#define VSL_APP VSL_Surface_01
 
 
 // ---- set global application pointer "g_app"

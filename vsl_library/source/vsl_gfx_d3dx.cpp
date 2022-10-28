@@ -41,12 +41,19 @@ public:
 		LPD3DXFONT font;
 
 	// ---- lookat: convert mouse to lookat view rotation and look distance from at 
-		FLOAT GetLookDistanceFromAt()  { return look_distance_from_at; }
-		FLOAT GetLookAtXAxisRotation() { return lookat_x_axis_rotation; }
-		FLOAT GetLookAtYAxisRotation() { return lookat_y_axis_rotation; }
-		VOID  SetLookDistanceFromAt(FLOAT  distance_from)   { look_distance_from_at  = distance_from; }
-		VOID  SetLookAtXAxisRotation(FLOAT x_axis_rotation) { lookat_x_axis_rotation = x_axis_rotation; }
-		VOID  SetLookAtYAxisRotation(FLOAT y_axis_rotation) { lookat_y_axis_rotation = y_axis_rotation; }
+		FLOAT Get_LookAt_Distance()
+			{ return lookat_distance; }
+		VOID  Set_LookAt_Distance(FLOAT lookat_distance)
+			{ this->lookat_distance = lookat_distance; }
+
+		FLOAT Get_LookAt_XAxisRotation()
+			{ return lookat_x_axis_rotation; }
+		FLOAT Get_LookAt_YAxisRotation()
+			{ return lookat_y_axis_rotation; }
+		VOID  Set_LookAt_XAxisRotation(FLOAT x_axis_rotation)
+			{ lookat_x_axis_rotation = x_axis_rotation; }
+		VOID  Set_LookAt_YAxisRotation(FLOAT y_axis_rotation)
+			{ lookat_y_axis_rotation = y_axis_rotation; }
 
 	private:
 
@@ -57,7 +64,7 @@ public:
 		//      gfx_command.GetMouseLeftButtonDownMoveX to lookat vector Y axis rotation  
 		//      gfx_command.GetMouseLeftButtonDownMoveY to lookat vector X axis rotation 
 		//
-		FLOAT look_distance_from_at  = 0;
+		FLOAT lookat_distance  = 0;
 		FLOAT lookat_x_axis_rotation = 0;
 		FLOAT lookat_y_axis_rotation = 0;
 
@@ -189,14 +196,49 @@ HRESULT Gfx_D3dx::SetupDX(LPDIRECT3DDEVICE9 device)
 }
 
 
-// ---------- Projection ----------
+// ---------- SetupViewport ----------
+/*!
+\brief setup the viewport parameters
+\author Gareth Edwards
+\param LPDIRECT3DDEVICE9 - pointer to an IDirect3DDevice9 structure
+\return HRESULT (SUCCESS_OK if ok)
+*/
+HRESULT Gfx_D3dx::SetupViewport(LPDIRECT3DDEVICE9 device)
+{
+
+	// ---- get client adjusted viewrect
+		UINT width = pimpl_gfx_d3dx->fw_win_create->GetWidth();
+		UINT height = pimpl_gfx_d3dx->fw_win_create->GetHeight();
+
+
+	// ---- viewport
+		UINT left   = 0;
+		UINT top    = 0;
+		UINT right  = width;
+		UINT bottom = height;
+
+	// ---- set viewport
+		D3DVIEWPORT9 fvp;
+		fvp.X      = (DWORD)(left   + 0.5);
+		fvp.Y      = (DWORD)(top    + 0.5);
+		fvp.Width  = (DWORD)(right  - left + 0.5);
+		fvp.Height = (DWORD)(bottom - top  + 0.5);
+		fvp.MinZ   =  0;
+		fvp.MaxZ   =  1;
+		device->SetViewport(&fvp);
+
+	return SUCCESS_OK;
+}
+
+
+// ---------- SetupProjection ----------
 /*!
 \brief setup a left-handed perspective projection matrix based on a vertical field of view
 \author Gareth Edwards
 \param LPDIRECT3DDEVICE9 - pointer to an IDirect3DDevice9 structure
 \return HRESULT (SUCCESS_OK if ok)
 */
-HRESULT Gfx_D3dx::Projection(LPDIRECT3DDEVICE9 device)
+HRESULT Gfx_D3dx::SetupProjection(LPDIRECT3DDEVICE9 device)
 {
 
 	// ---- local
@@ -222,14 +264,14 @@ HRESULT Gfx_D3dx::Projection(LPDIRECT3DDEVICE9 device)
 }
 
 
-// ---------- LookAtLH ----------
+// ---------- SetupLookAtLH ----------
 /*!
 \brief setup lookat axis aligned colinear with negative (left handed) z axis
 \author Gareth Edwards
 \param LPDIRECT3DDEVICE9 - pointer to an IDirect3DDevice9 structure
 \return HRESULT (SUCCESS_OK if ok)
 */
-HRESULT Gfx_D3dx::LookAtLH(LPDIRECT3DDEVICE9 device)
+HRESULT Gfx_D3dx::SetupLookAtLH(LPDIRECT3DDEVICE9 device)
 {
 
 	// ---- Setup_Lookat_Axis
@@ -268,16 +310,16 @@ HRESULT Gfx_D3dx::LookAtLH(LPDIRECT3DDEVICE9 device)
 
 	// ---- update camera "view" by accumulated mouse move and wheel click
 		vsl_library::Gfx_Command *gfx_com = pimpl_gfx_d3dx->gfx_command;
-		pimpl_gfx_d3dx->SetLookDistanceFromAt(-gfx_com->GetMouseWheelClick());
-		pimpl_gfx_d3dx->SetLookAtXAxisRotation(gfx_com->GetMouseLeftButtonDownMoveX()/2);
-		pimpl_gfx_d3dx->SetLookAtYAxisRotation(gfx_com->GetMouseLeftButtonDownMoveY()/2);
+		pimpl_gfx_d3dx->Set_LookAt_Distance(-gfx_com->GetMouseWheelClick());
+		pimpl_gfx_d3dx->Set_LookAt_XAxisRotation(gfx_com->GetMouseLeftButtonDownMoveX()/2);
+		pimpl_gfx_d3dx->Set_LookAt_YAxisRotation(gfx_com->GetMouseLeftButtonDownMoveY()/2);
 
 	// ---- rotate negative camera "view" to match user experience
 		D3DXVECTOR3 v[3];
 		Setup_Lookat_Axis(
-				-pimpl_gfx_d3dx->GetLookAtYAxisRotation(),
-				-pimpl_gfx_d3dx->GetLookAtXAxisRotation(),
-				-pimpl_gfx_d3dx->GetLookDistanceFromAt(),
+				-pimpl_gfx_d3dx->Get_LookAt_YAxisRotation(),
+				-pimpl_gfx_d3dx->Get_LookAt_XAxisRotation(),
+				-pimpl_gfx_d3dx->Get_LookAt_Distance(),
 				v
 			);
 

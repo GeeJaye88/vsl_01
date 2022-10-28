@@ -99,7 +99,7 @@ Gfx_Element_Engine::Gfx_Element_Engine(VOID) : pimpl_gfx_element_engine(new Pimp
 		Gfx_Element *engine_root_element = GetEngineRoot();
 		engine_root_element->SetName("Engine");
 
-	// ---- default project
+	// ---- scene
 		SetGfxProject(engine_root_element->Append("Project"));
 		GetProjectRoot()->GetConfigure()->SetVisible(TRUE);
 

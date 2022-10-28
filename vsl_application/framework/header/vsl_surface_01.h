@@ -41,25 +41,39 @@ namespace vsl_application
 		{
 			public:
 
+			// ---------- OVERIDE ----------
+
+
 			// ---------- APPLICATION ----------
 
-			// ---- setup graphics
+			// ---- invoked by Fw_Display - setup
 				HRESULT Gfx_Setup_Project(VOID) override;
+
+			// ---- invoked by Fw_Setup - setup specific elements
 				HRESULT Gfx_Setup_Configurations(VOID) override;
 				HRESULT Gfx_Setup_Coordinates(VOID) override;
 				HRESULT Gfx_Setup_Components(VOID) override;
 
-			// ---- handle elements that have been bookmarked
-				HRESULT Gfx_Element_Bookmarks(VOID) override;
+			// ---- invoked by Fw_Display
+				HRESULT Gfx_Setup_Bookmarks(VOID) override;
 
-				// ---------- UPDATE ----------
 
-				// ---- update state and text overlay
-				//VOID Update_Gfx_Command_Param(VOID);
+			// ---------- UPDATE ----------
+
+				// ---- update on input and add text overlay
 				VOID Update_If_AsyncKey_Pressed(VOID) override;
 				VOID Update_On_Screen_Text(VOID) override;
 
-				// 
+
+			// ---------- NEW ---------- 
+
+			// ---- setup
+				HRESULT Setup_Project(VOID);
+
+			// ---- display
+				HRESULT Surface_01::Display_Project(vsl_library::Gfx_Frame *frame, UINT level);
+
+				// ---- properties
 				BOOL text_mode = FALSE;
 		};
 

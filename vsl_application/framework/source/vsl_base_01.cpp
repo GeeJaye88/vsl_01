@@ -103,42 +103,6 @@ Base_01::Base_01(VOID) : pimpl_base_v01(new Pimpl_Base_01)
 	// ---- Gfx_Log - write this app name
 		hr = gfx_log->WriteBanner(win_cr8->GetName());
 
-	// ---- Gfx_Frameset
-
-		Gfx_Frame::Rectangle outside  = { 0.1f, 0.1f, 0.9f, 0.9f };
-		Gfx_Frame::Rectangle outside1 = { 0.1f, 0.1f, 0.5f, 0.5f };
-		Gfx_Frame::Rectangle outside2 = { 0.5f, 0.1f, 0.9f, 0.5f };
-		Gfx_Frame::Rectangle outside3 = { 0.1f, 0.5f, 0.5f, 0.9f };
-
-		Gfx_Frame::Rectangle margin  = {  2,  2,  2,  2 };
-		Gfx_Frame::Rectangle border  = { 10, 10, 10, 10 };
-		Gfx_Frame::Rectangle padding = {  4,  4,  4,  4 };
-		Gfx_Frame::Rectangle inside;
-
-		Gfx_Frameset *gfx_frameset = GetFrameset();
-
-		gfx_frameset->SetDimensions(win_cr8->GetWidth(), win_cr8->GetHeight());
-
-		Gfx_Frame *frame = gfx_frameset->AddFrame("Frame");
-			frame->SetFrameRect(Gfx_Frame::TYPE::OUTSIDE, &outside);
-			frame->SetFrameRect(Gfx_Frame::TYPE::MARGIN,  &margin);
-			frame->SetFrameRect(Gfx_Frame::TYPE::BORDER,  &border);
-			frame->SetFrameRect(Gfx_Frame::TYPE::PADDING, &padding);
-
-		Gfx_Frame *cf1 = frame->AddChild("CF1");
-			cf1->SetFrameRect(Gfx_Frame::TYPE::OUTSIDE, &outside1);
-			cf1->SetFrameRect(Gfx_Frame::TYPE::MARGIN, &margin);
-
-		Gfx_Frame *cf2 = frame->AddChild("CF2");
-			cf2->SetFrameRect(Gfx_Frame::TYPE::OUTSIDE, &outside2);
-
-		Gfx_Frame *cf3 = frame->AddChild("CF3");
-			cf3->SetFrameRect(Gfx_Frame::TYPE::OUTSIDE, &outside3);
-
-		gfx_frameset->SetGfxLog(gfx_log);
-
-		gfx_frameset->Setup();
-
 	// ---- Gfx_Element_Engine
 		Gfx_Element_Engine *gfx_gee = GetElementEngine();
 		gfx_gee->SetGfxLog(gfx_log);
@@ -156,15 +120,20 @@ Base_01::~Base_01()
 // ---- private implementation objectinterface
 
 // ---- get Win structs
-	vsl_system::Win_Create  *Base_01::Get_Win_Create(VOID) { return &pimpl_base_v01->fw_win_create; }
-	vsl_system::Win_Engine  *Base_01::Get_Win_Engine(VOID) { return &pimpl_base_v01->fw_win_engine; }
+	vsl_system::Win_Create  *Base_01::Get_Win_Create(VOID)
+		{ return &pimpl_base_v01->fw_win_create; }
+	vsl_system::Win_Engine  *Base_01::Get_Win_Engine(VOID)
+		{ return &pimpl_base_v01->fw_win_engine; }
 
 // ---- get Gfx objects
-	vsl_library::Gfx_Command *Base_01::GetCommand(VOID) { return &pimpl_base_v01->gfx_command; }
+	vsl_library::Gfx_Command *Base_01::GetCommand(VOID)
+		{ return &pimpl_base_v01->gfx_command; }
 
-	vsl_library::Gfx_D3dx *Base_01::GetD3dx(VOID) { return &pimpl_base_v01->gfx_d3dx; }
+	vsl_library::Gfx_D3dx *Base_01::GetD3dx(VOID)
+		{ return &pimpl_base_v01->gfx_d3dx; }
 
-	vsl_library::Gfx_Log *Base_01::GetLog(VOID) { return &pimpl_base_v01->gfx_log; }
+	vsl_library::Gfx_Log *Base_01::GetLog(VOID)
+		{ return &pimpl_base_v01->gfx_log; }
 
 	vsl_library::Gfx_Frameset *Base_01::GetFrameset(VOID)
 		{ return &pimpl_base_v01->gfx_frameset; }
@@ -287,15 +256,14 @@ HRESULT Base_01::Fw_Display(LPDIRECT3DDEVICE9 device)
 		Update_If_AsyncKey_Pressed();
 		Update_On_Screen_Text();
 
-		Gfx_Setup_Viewrect(device);
-
 	// ---- handle gfx elements that have been bookmarked
-		hr = Gfx_Element_Bookmarks();
+		hr = Gfx_Setup_Bookmarks();
 		if (FAILED(hr)) return ERROR_FAIL;
 
 	// ---- d3d (no fail conditions)
-		hr = GetD3dx()->Projection(device);
-		hr = GetD3dx()->LookAtLH(device);
+		hr = GetD3dx()->SetupViewport(device);
+		hr = GetD3dx()->SetupProjection(device);
+		hr = GetD3dx()->SetupLookAtLH(device);
 
 	// ---- set render states and lighting
 		hr = GetD3dx()->Display(device);
@@ -306,33 +274,6 @@ HRESULT Base_01::Fw_Display(LPDIRECT3DDEVICE9 device)
 		if (FAILED(hr)) return ERROR_FAIL;
 
 	return SUCCESS_OK;
-}
-
-
-HRESULT Base_01::Gfx_Setup_Viewrect(LPDIRECT3DDEVICE9 device)
-{
-
-	// ---- local
-		IDirect3DDevice9 *d3d9_device = device;
-
-	// ---- get client adjusted viewrect
-		UINT width = pimpl_base_v01->fw_win_create.GetWidth();
-		UINT height = pimpl_base_v01->fw_win_create.GetHeight();
-
-		Vs_FloatRectangle viewrect = { 0, 0, (FLOAT)width, (FLOAT)height };
-
-	// ---- set viewport
-		D3DVIEWPORT9 fvp;
-		fvp.X      = (DWORD)(viewrect.left+0.5);
-		fvp.Y      = (DWORD)(viewrect.top+0.5);
-		fvp.Width  = (DWORD)(viewrect.right - viewrect.left + 0.5);
-		fvp.Height = (DWORD)(viewrect.bottom - viewrect.top + 0.5);
-		fvp.MinZ   =  0;
-		fvp.MaxZ   =  1;
-		d3d9_device->SetViewport(&fvp);
-
-		return SUCCESS_OK;
-
 }
 
 
@@ -535,6 +476,9 @@ HRESULT Base_01::Gfx_Setup_Project(VOID)
 }
 
 
+////////////////////////////////////////////////////////////////////////////////
+
+
 // ---------- Gfx_Setup_Configurations --------
 /*!
 \brief setup gfx element configurations
@@ -614,12 +558,12 @@ HRESULT Base_01::Gfx_Setup_Components(VOID)
 }
 
 
-// ---------- Gfx_Element_Bookmarks --------
+// ---------- Gfx_Setup_Bookmarks --------
 /*!
-\brief handle gfx elements that have been bookmarked
+\brief setup gfx elements that have been bookmarked
 \author Gareth Edwards
 */
-HRESULT Base_01::Gfx_Element_Bookmarks(VOID)
+HRESULT Base_01::Gfx_Setup_Bookmarks(VOID)
 {
 
 	// ---- scope
@@ -673,22 +617,6 @@ HRESULT Base_01::Gfx_Element_Bookmarks(VOID)
 		}
 
 	return SUCCESS_OK;
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-
-
-// ---------- Gfx_Read_Project_SDL --------
-/*!
-\brief
-\author Gareth Edwards
-*/
-VOID Base_01::Gfx_Read_Project_SDL(VOID)
-{
-
-
-
 }
 
 

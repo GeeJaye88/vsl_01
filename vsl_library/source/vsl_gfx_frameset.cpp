@@ -147,9 +147,6 @@ class Gfx_Frameset::Pimpl_Gfx_Frameset
 
 			// ---- store inside proportions
 				frame->SetFrameRect(Gfx_Frame::TYPE::INSIDE, &inside);
-
-				float fred = 2;
-
 		}
 
 		HRESULT Setup(Gfx_Frame *frame, UINT level)

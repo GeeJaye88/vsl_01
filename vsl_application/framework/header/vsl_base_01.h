@@ -46,7 +46,7 @@ namespace vsl_application
 			// ---------- FRAMEWORK ----------
 
 			// ---- required by framework:
-				virtual HRESULT Fw_Setup(VOID);
+				HRESULT Fw_Setup(VOID);
 				HRESULT Fw_SetupDX(LPDIRECT3DDEVICE9);
 				HRESULT Fw_Display(LPDIRECT3DDEVICE9);
 				HRESULT Fw_CleanupDX(LPDIRECT3DDEVICE9);
@@ -63,20 +63,23 @@ namespace vsl_application
 
 			// ---------- APPLICATION ----------
 
-			// ---- setup graphics
+			// ---- invoked by Fw_Setup - setup
 				virtual HRESULT Gfx_Setup_Project(VOID);
 				virtual HRESULT Gfx_Setup_Configurations(VOID);
 				virtual HRESULT Gfx_Setup_Coordinates(VOID);
 				virtual HRESULT Gfx_Setup_Components(VOID);
 
-			// ---- handle elements that have been bookmarked
-				virtual HRESULT Gfx_Element_Bookmarks(VOID);
+			// ---- invoked by Fw_Display
+				virtual HRESULT Gfx_Setup_Bookmarks(VOID);
 
-			// ---- panels
-				HRESULT Gfx_Setup_Viewrect(LPDIRECT3DDEVICE9);
 
-			// ---- housekeeping
-				VOID Gfx_Read_Project_SDL(VOID);
+			// ---------- UPDATE ----------
+
+			// ---- invoked by Fw_Display - handle input and add text overlay
+				virtual VOID Update_Gfx_Command_Param(VOID);
+				virtual VOID Update_If_AsyncKey_Pressed(VOID);
+				virtual VOID Update_On_Screen_Text(VOID);
+
 
 			// ---------- PRIVATE IMPLEMENTATION ----------
 
@@ -91,13 +94,6 @@ namespace vsl_application
 				vsl_library::Gfx_Frameset       *GetFrameset(VOID);
 				vsl_library::Gfx_Element_Engine *GetElementEngine(VOID);
 
-			// ---------- UPDATE ----------
-
-			// ---- update state and text overlay
-				virtual VOID Update_Gfx_Command_Param(VOID);
-				virtual VOID Update_If_AsyncKey_Pressed(VOID);
-				virtual VOID Update_On_Screen_Text(VOID);
-
 		private:
 
 			// ---- private implementation
@@ -110,7 +106,7 @@ namespace vsl_application
 				//
 				// usage: std::unique_ptr<Pimpl_Base_01> *pimp = GetPimp(VOID);
 				//
-				std::unique_ptr<Pimpl_Base_01> *GetPimp(VOID) { return &pimpl_base_v01; }
+				// std::unique_ptr<Pimpl_Base_01> *GetPimp(VOID) { return &pimpl_base_v01; }
 
 		};
 

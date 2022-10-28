@@ -48,9 +48,7 @@ namespace vsl_application
 				HRESULT Gfx_Setup_Configurations(VOID) override;
 				HRESULT Gfx_Setup_Coordinates(VOID) override;
 				HRESULT Gfx_Setup_Components(VOID) override;
-
-			// ---- handle elements that have been bookmarked
-				HRESULT Gfx_Element_Bookmarks(VOID) override;
+				HRESULT Gfx_Setup_Bookmarks(VOID) override;
 
 		};
 

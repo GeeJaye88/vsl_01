@@ -30,9 +30,8 @@ using namespace vsl_application;
 */
 HRESULT Surface_01::Gfx_Setup_Project(VOID)
 {
-	// ---- rename
-		vsl_system::Win_Create *win_cr8 = Get_Win_Create();
-		win_cr8->SetName("Surface_V01");
+	// ---- setup including rename, etc
+		HRESULT hr = Setup_Project();
 
 	// ---- scope
 		using namespace vsl_library;
@@ -107,6 +106,9 @@ HRESULT Surface_01::Gfx_Setup_Project(VOID)
 }
 
 
+////////////////////////////////////////////////////////////////////////////////
+
+
 // ---------- Gfx_Setup_Configurations --------
 /*!
 \brief setup gfx element configurations
@@ -137,8 +139,9 @@ HRESULT Surface_01::Gfx_Setup_Coordinates(VOID)
 		if (element_tr1 != NULL)
 		{
 			Gfx_Element_Coordinate *coordinate = element_tr1->GetCoordinate();
-			vsl_system::Vsl_Vector3 v = { 1, 2, 1 };
-			coordinate->SetScale(vsl_system::Vsl_Vector3(1, 2, 1));
+			//vsl_system::Vsl_Vector3 v = { 1, 1, 1 };
+			//coordinate->SetScale(v);
+			coordinate->SetScale(vsl_system::Vsl_Vector3(1, 1, 1));
 		}
 
 	return SUCCESS_OK;
@@ -186,12 +189,15 @@ HRESULT Surface_01::Gfx_Setup_Components(VOID)
 }
 
 
-// ---------- Gfx_Element_Bookmarks --------
+////////////////////////////////////////////////////////////////////////////////
+
+
+// ---------- Gfx_Setup_Bookmarks --------
 /*!
-\brief handle gfx elements that have been bookmarked
+\brief setup gfx elements that have been bookmarked
 \author Gareth Edwards
 */
-HRESULT Surface_01::Gfx_Element_Bookmarks(VOID)
+HRESULT Surface_01::Gfx_Setup_Bookmarks(VOID)
 {
 
 	// ---- scope
@@ -246,6 +252,9 @@ HRESULT Surface_01::Gfx_Element_Bookmarks(VOID)
 
 	return SUCCESS_OK;
 }
+
+
+////////////////////////////////////////////////////////////////////////////////
 
 
 // ---------- Update_If_Key_Pressed ----------
@@ -333,6 +342,89 @@ VOID Surface_01::Update_On_Screen_Text(VOID)
 			rct.top += 20;
 			rct.bottom += 20;
 		}
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+// ---------- Setup_Project --------
+/*!
+\brief setup gfx element projects
+\author Gareth Edwards
+*/
+HRESULT Surface_01::Setup_Project(VOID)
+{
+	// ---- rename
+		vsl_system::Win_Create *win_cr8 = Get_Win_Create();
+		win_cr8->SetName("Surface Test");
+
+	// ---- scope
+		using namespace vsl_library;
+
+	// ---- Gfx_Frameset
+
+		Gfx_Frame::Rectangle outside  = { 0.1f, 0.1f, 0.9f, 0.9f };
+		Gfx_Frame::Rectangle outside1 = { 0.1f, 0.1f, 0.5f, 0.5f };
+		Gfx_Frame::Rectangle outside2 = { 0.5f, 0.1f, 0.9f, 0.5f };
+		Gfx_Frame::Rectangle outside3 = { 0.1f, 0.5f, 0.5f, 0.9f };
+
+		Gfx_Frame::Rectangle margin  = {  2,  2,  2,  2 };
+		Gfx_Frame::Rectangle border  = { 10, 10, 10, 10 };
+		Gfx_Frame::Rectangle padding = {  4,  4,  4,  4 };
+		Gfx_Frame::Rectangle inside;
+
+		Gfx_Frameset *gfx_frameset = GetFrameset();
+
+		gfx_frameset->SetDimensions(win_cr8->GetWidth(), win_cr8->GetHeight());
+
+		Gfx_Frame *frame = gfx_frameset->AddFrame("Frame");
+			frame->SetFrameRect(Gfx_Frame::TYPE::OUTSIDE, &outside);
+			frame->SetFrameRect(Gfx_Frame::TYPE::MARGIN,  &margin);
+			frame->SetFrameRect(Gfx_Frame::TYPE::BORDER,  &border);
+			frame->SetFrameRect(Gfx_Frame::TYPE::PADDING, &padding);
+
+		Gfx_Frame *cf1 = frame->AddChild("CF1");
+			cf1->SetFrameRect(Gfx_Frame::TYPE::OUTSIDE, &outside1);
+			cf1->SetFrameRect(Gfx_Frame::TYPE::MARGIN,  &margin);
+
+		Gfx_Frame *cf2 = frame->AddChild("CF2");
+			cf2->SetFrameRect(Gfx_Frame::TYPE::OUTSIDE, &outside2);
+			cf2->SetFrameRect(Gfx_Frame::TYPE::MARGIN,  &margin);
+
+		Gfx_Frame *cf3 = frame->AddChild("CF3");
+			cf3->SetFrameRect(Gfx_Frame::TYPE::OUTSIDE, &outside3);
+			cf3->SetFrameRect(Gfx_Frame::TYPE::MARGIN,  &margin);
+
+		Gfx_Log *gfx_log = GetLog();
+		gfx_frameset->SetGfxLog(gfx_log);
+
+		gfx_frameset->Setup();
+
+
+	return SUCCESS_OK;
+
+}
+
+HRESULT Surface_01::Display_Project(vsl_library::Gfx_Frame *frame, UINT level)
+{
+	using namespace vsl_library;
+
+	Gfx_Log *gfx_log = GetLog();
+
+	while (frame != NULL)
+	{
+		//Calculate(frame);
+
+		std::string msg = std::string(4 * level, ' ') + std::to_string(level) + ": " + frame->GetName();
+		gfx_log->Write(msg);
+		if (Gfx_Frame *child = frame->GetFirst())
+		{
+			Display_Project(child, level + 1);
+		}
+		frame = frame->GetNext();
+	}
+	return SUCCESS_OK;
 }
 
 
